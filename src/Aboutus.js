@@ -1,70 +1,49 @@
 import React from 'react';
-import './components/styles.css';  // Assuming you have a separate CSS file for styling
+import './components/styles.css';
 
 export default function AboutUsPage() {
     return (
         <div className="about-us-container">
-            <div className="about-header">
-                <h2>About MaidEase</h2>
-                <p>Reliable Maid Services at Your Doorstep</p>
-            </div>
+            <h2 text-size="500px" >About Us</h2>
 
-            <section className="about-section mission">
+            <section className="about-section">
                 <h3>Our Mission</h3>
                 <p>
-                    MaidEase is committed to providing exceptional and dependable maid services that elevate the
-                    quality of life for families and households. Our goal is to simplify everyday living through
-                    accessible, affordable, and highly skilled cleaning, cooking, babysitting, and other maid services.
+                    At MaidEase, we are dedicated to providing top-notch maid services to households
+                    around the city. Our mission is to make everyday life easier and more convenient for our clients by
+                    offering reliable, vetted, and highly skilled maids who are trained to meet a variety of household needs.
                 </p>
             </section>
 
-            <section className="about-section vision">
+            <section className="about-section">
                 <h3>Our Vision</h3>
                 <p>
-                    We envision becoming the most trusted and innovative maid service provider, creating a seamless
-                    connection between households and maids, using technology and human-centered services to meet your
-                    needs with excellence.
+                    Our vision is to become the most trusted and efficient maid service provider,
+                    known for our commitment to customer satisfaction and creating a positive work environment for our maids.
+                    We aim to revolutionize the way households hire and manage maid services by using technology and innovation.
                 </p>
             </section>
 
-            <section className="about-section values">
+            <section className="about-section">
                 <h3>Our Values</h3>
                 <ul>
-                    <li>Integrity: We operate with transparency and honesty.</li>
-                    <li>Reliability: We ensure that our clients can trust us with their homes.</li>
-                    <li>Respect: Every maid and client deserves dignity and respect in all interactions.</li>
-                    <li>Quality: Excellence is our benchmark. We ensure high standards in all services.</li>
+                    <li>Integrity: We believe in honesty and transparency in everything we do.</li>
+                    <li>Reliability: We provide dependable services that our clients can count on.</li>
+                    <li>Respect: We treat our employees and customers with the utmost respect and understanding.</li>
+                    <li>Quality: We ensure that every service meets high standards of excellence.</li>
                 </ul>
             </section>
 
-            <section className="about-section team">
-                <h3>Meet Our Team</h3>
-                <div className="team-members">
-                    <div className="team-member">
-                        <img src="/images/team1.jpg" alt="Team Member 1" />
-                        <h4>John Doe</h4>
-                        <p>CEO & Founder</p>
-                    </div>
-                    <div className="team-member">
-                        <img src="/images/team2.jpg" alt="Team Member 2" />
-                        <h4>Jane Smith</h4>
-                        <p>Operations Manager</p>
-                    </div>
-                    <div className="team-member">
-                        <img src="/images/team3.jpg" alt="Team Member 3" />
-                        <h4>Mary Johnson</h4>
-                        <p>Customer Support Lead</p>
-                    </div>
-                </div>
-            </section>
-
-            <section className="about-section contact">
+            <section className="about-section">
                 <h3>Contact Us</h3>
-                <p>If you have any questions, feel free to get in touch with us.</p>
+                <p>
+                    Have any questions or need assistance? 
+                    <br></br>Feel free to reach out to us:
+                </p>
                 <ul>
                     <li>Email: <a href="mailto:support@maidease.com">support@maidease.com</a></li>
                     <li>Phone: <a href="tel:+123456789">+1 234 567 89</a></li>
-                    <li>Address: 123 MaidEase Street, Lahore, Pakistan</li>
+                    <li>Address: Lahore, Pakistan</li>
                 </ul>
             </section>
         </div>
