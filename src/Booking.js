@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './components/styles.css';
 import { Avatar } from 'primereact/avatar';
 import { Checkbox } from 'primereact/checkbox';
+//imoory
 
 export default function BookingPage() {
     const [skills, setSkills] = useState([]);
