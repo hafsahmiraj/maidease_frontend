@@ -11,14 +11,9 @@ import Maidnav from './Maidnav';
 import Usernav from './Usernav';   
 import Rating from './Rating';
 import Booking from './Booking';
-import Aboutus from './Aboutus';
+import LoginM from "./LoginM";
+import LoginU from "./LoginU";
 
-
-import MaidSignup from './components/MaidSignup';
-import UserSignup from './components/UserSignup';
-import MaidLogin from './components/MaidLogin';
-import UserLogin from './components/UserLogin';
-import SignupSelection from './components/SignupSelection';
 
 function App() {
   return (
@@ -39,14 +34,8 @@ function App() {
           <Route path="/usernav" element={<Usernav />} />
           <Route path="/Rating" element={<Rating/>} />
           <Route path="/Booking" element={<Booking/>} />
-          <Route path="/Aboutus" element={<Aboutus/>} />
-
-          {/* Other signup/login pages */}
-          <Route path="/maid/signup" element={<MaidSignup />} />
-          <Route path="/user/signup" element={<UserSignup />} />
-          <Route path="/maid/login" element={<MaidLogin />} />
-          <Route path="/user/login" element={<UserLogin />} />
-          <Route path="/signup-selection" element={<SignupSelection />} />
+           <Route path="/LoginM" element={<LoginM />} />
+             <Route path="/LoginU" element={<LoginU />} />
         </Routes>
       </Router>
     </PrimeReactProvider>
