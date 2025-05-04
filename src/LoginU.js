@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Dropdown} from 'primereact/dropdown';
 import {Toast} from 'primereact/toast';
+import axios from 'axios';
 import './login.css';
 
 export default function UserU() {
@@ -55,48 +56,56 @@ export default function UserU() {
   const handleSignup = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/users/signup', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/api/users/signup', formData, {
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
       });
-      const data = await response.json();
       setLoading(false);
 
-      if (response.ok) {
+      if (response.status === 200) {
+        const data = response.data;
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userWithoutPassword.id);
+        localStorage.setItem('userType', 'USER');
         navigate('/Useredit');
       } else {
-        toast.current.show({severity: 'error', summary: 'Error', detail: data.message});
+        toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
       }
     } catch (error) {
       setLoading(false);
-      toast.current.show({severity: 'error', summary: 'Error', detail: 'Something went wrong'});
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Something went wrong',
+      });
     }
   };
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:5000/api/users/login', {
+        email: formData.email,
+        password: formData.password,
+      }, {
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email: formData.email, password: formData.password}),
       });
-      const data = await response.json();
       setLoading(false);
 
-      if (response.ok) {
+      if (response.status === 200) {
+        const data = response.data;
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user.id);
         navigate('/Useredit');
       } else {
-        toast.current.show({severity: 'error', summary: 'Error', detail: data.message});
+        toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
       }
     } catch (error) {
       setLoading(false);
-      toast.current.show({severity: 'error', summary: 'Error', detail: 'Something went wrong'});
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: error.response?.data?.message || 'Something went wrong',
+      });
     }
   };
 
@@ -136,11 +145,11 @@ export default function UserU() {
                       />
                       <Dropdown
                           value={formData.gender}
-                          onChange={(e) => setFormData({ ...formData, gender: e.value })}
+                          onChange={(e) => setFormData({...formData, gender: e.value})}
                           options={[
-                            { label: 'Male', value: 'Male' },
-                            { label: 'Female', value: 'Female' },
-                            { label: 'Other', value: 'Other' },
+                            {label: 'Male', value: 'Male'},
+                            {label: 'Female', value: 'Female'},
+                            {label: 'Other', value: 'Other'},
                           ]}
                           placeholder="Select Gender"
                           className="w-full"
