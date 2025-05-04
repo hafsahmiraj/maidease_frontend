@@ -1,0 +1,196 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.page-container {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.cards-grid {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.maid-card-wrapper {
+  width: 100%;
+}
+
+.maid-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.maid-card:hover {
+  transform: translateY(-2px); /* Reduced lift */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Softer shadow */
+}
+
+.maid-main-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.maid-card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.maid-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.maid-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.75rem;
+  border: 2px solid #eee;
+}
+
+.maid-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.maid-description {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: auto;
+}
+
+.maid-bottom {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-text {
+  color: #1dbf73;
+  font-weight: bold;
+  margin-top: 0.2rem;
+}
+
+.sorting-filters {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.sort-dropdown {
+  width: 22rem;
+}
+
+.top-banner {
+  width: 100%;
+  overflow: hidden;
+}
+
+.top-banner-text {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 2;
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+}
+
+.signup-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.signup-options a {
+  text-decoration: none;
+  background-color: #0077cc;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+.signup-options a:hover {
+  background-color: #005fa3;
+}
+
+.form-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+@media (max-height: 800px), (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .form-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+/* ✅ Updated sign-in button color and hover */
+button {
+  background-color:rgb(46, 161, 243);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color:rgb(0, 119, 203);
+  transform: translateY(-2px);
+}

@@ -1,0 +1,99 @@
+/* Center the entire card and give padding to the page */
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f0f4f8, #ffffff);
+}
+
+/* Card styling */
+.card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto; /* For small devices only if needed */
+}
+
+/* DataTable Styles */
+.p-datatable {
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+/* Table Header */
+.p-datatable-thead > tr > th {
+    background-color: #f9fafb;
+    border: 2px solid #e2e8f0; 
+    color: #141414;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+/* Table Body */
+.p-datatable-tbody > tr > td {
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    color: #334155;
+    background: #f9fafb;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+/* Table Hover Effect */
+.p-datatable-tbody > tr:hover {
+    background-color: #e0f2fe;
+}
+
+/* Header (Products + Refresh Button) */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Footer */
+.footer-text {
+    font-size: 1rem;
+    color: #64748b;
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Buttons */
+.p-button {
+    background-color: #3b82f6;
+    border: none;
+}
+
+.p-button:hover {
+    background-color: #2563eb;
+}
+
+/* Tags */
+.p-tag-success {
+    background-color: #22c55e;
+    color: white;
+}
+.p-tag-warning {
+    background-color: #facc15;
+    color: black;
+}
+.p-tag-danger {
+    background-color: #ef4444;
+    color: white;
+}

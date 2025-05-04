@@ -1,0 +1,35 @@
+.profile-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    font-family: 'Outfit', sans-serif;
+}
+
+.profile-details p {
+    margin: 10px 0;
+}
+
+.edit-form input,
+.edit-form textarea,
+.edit-form select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 8px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+}
+
+button:hover {
+    background: #0056b3;
+}

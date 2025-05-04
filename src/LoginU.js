@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './login.css';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'primereact/dropdown';
+import Navbar from './Navbar';
 
 export default function LoginU() {
   const [signupStep, setSignupStep] = useState(0);
@@ -27,6 +28,8 @@ export default function LoginU() {
  
 
   return (
+     <>
+                                                 <Navbar /> 
     <div className="login-page-wrapper">
       <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id="container">
         <div className="form-container sign-up-container">
@@ -110,5 +113,6 @@ export default function LoginU() {
         </div>
       </div>
     </div>
+    </>
   );
 }
