@@ -1,40 +1,46 @@
-import React from 'react';
-import { InputText } from 'primereact/inputtext';
-import 'primereact/resources/themes/lara-light-indigo/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div className="navbar">
-      {/* Left side - Title */}
-      <div className="navbar-left">
-        <img
-          alt="logo"
-          src="/navbar-logo.png"
-          height="40"
-          className="navbar-logo"
-        />
-        <div className="navbar-title">MaidEase</div>
-      </div>
-      {/* Right side - Menu Links */}
-      <div className="navbar-right">
-        <div className="navbar-links">
-          <Link to="/">Home</Link>
-          <Link to="/aboutus">About us</Link>
-          <Link to="/tableU">Hired</Link>
-          <div className="dropdown">
-            <button className="sign-in">Sign In</button>
-            <div className="dropdown-content">
-              <Link to="/login/maid">Maid</Link>
-              <Link to="/login/user">User</Link>
-            </div>
+      <div className="navbar">
+        <div className="navbar-left">
+          <img alt="logo" src="/navbar-logo.png" height="40" className="navbar-logo"/>
+          <div className="navbar-title">MaidEase</div>
+        </div>
+        <div className="navbar-right">
+          <div className="navbar-links">
+            <Link to="/">Home</Link>
+            <Link to="/aboutus">About us</Link>
+            {isLoggedIn ? (
+                <>
+                  <Link to="/tableU">Hired</Link>
+                  <button onClick={handleLogout}>Logout</button>
+                </>
+            ) : (
+                <div className="dropdown">
+                  <button className="sign-in">Sign In</button>
+                  <div className="dropdown-content">
+                    <Link to="/login/maid">Maid</Link>
+                    <Link to="/login/user">User</Link>
+                  </div>
+                </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
-
   );
 }
