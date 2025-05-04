@@ -4,7 +4,6 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
 import { Tag } from 'primereact/tag';
-import UserNav from './UserNav';
 import './tableu.css';
 
 // src/service/ProductService.js
@@ -110,7 +109,6 @@ export default function TemplateDemo() {
 
     return (
           <>
-                                         <UserNav /> 
        <div className="page-container">
         <div className="card">
             <div className="header-container">

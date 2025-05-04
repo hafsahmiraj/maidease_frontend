@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
 import './ProfilePageM.css';
-import Navbar from './Navbar';
+
 
 export const ProductService = {
     getProducts: async () => {
@@ -112,7 +112,7 @@ export default function MaidProfilePage() {
 
     return (
         <>
-                         <Navbar /> 
+                       
         <div className="profile-page">
             <div className="profile-card">
                 <div className="profile-grid">

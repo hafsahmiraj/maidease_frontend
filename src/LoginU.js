@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './login.css';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'primereact/dropdown';
-import Navbar from './Navbar';
+
 
 export default function LoginU() {
   const [signupStep, setSignupStep] = useState(0);
@@ -17,6 +17,7 @@ export default function LoginU() {
   const districtOptions = [
     { label: 'Punjab', value: 'Punjab' },
     { label: 'Sindh', value: 'Sindh' },
+    { label: 'Balochistan', value: 'Balochistan' },
     { label: 'KPK', value: 'KPK' },
   ];
 
@@ -29,12 +30,11 @@ export default function LoginU() {
 
   return (
      <>
-                                                 <Navbar /> 
     <div className="login-page-wrapper">
       <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id="container">
         <div className="form-container sign-up-container">
           <form action="#">
-            <h1>Create Account</h1>
+            <h1>Create User Account</h1>
             <div className="form-step-wrapper">
               {signupStep === 0 && (
                 <>
@@ -89,7 +89,7 @@ export default function LoginU() {
 
         <div className="form-container sign-in-container">
           <form action="#">
-            <h1>Sign in</h1>
+            <h1>User Sign in</h1>
             <input type="email" placeholder="Email" />
             <input type="password" placeholder="Password" />
             <Link to="#">Forgot your password?</Link>
@@ -105,7 +105,7 @@ export default function LoginU() {
               <button className="ghost" onClick={() => setIsRightPanelActive(false)}>Sign In</button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
+              <h1>Hello, Users!</h1>
               <p>Enter your personal details and start journey with us</p>
               <button className="ghost" onClick={() => setIsRightPanelActive(true)}>Sign Up</button>
             </div>

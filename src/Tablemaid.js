@@ -4,7 +4,6 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
 import { Tag } from 'primereact/tag';
-import MaidNav from './MaidNav';
 import './tablemaid.css';
 
 
@@ -116,7 +115,6 @@ export default function MaidHistory() {
 
     return (
         <>
-                                 <MaidNav /> 
         <div className="page-container">
             <div className="card">
                 <div className="header-container">
