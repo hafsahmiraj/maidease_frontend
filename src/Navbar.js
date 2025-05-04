@@ -24,6 +24,7 @@ export default function Navbar() {
         <div className="navbar-links">
           <Link to="/">Home</Link>
           <Link to="/aboutus">About us</Link>
+          <Link to="/tableU">Hired</Link>
           <div className="dropdown">
             <button className="sign-in">Sign In</button>
             <div className="dropdown-content">
