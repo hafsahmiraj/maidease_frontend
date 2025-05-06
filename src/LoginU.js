@@ -14,7 +14,6 @@ export default function UserU() {
     password: '',
     gender: '',
     cnic_number: '',
-    contact_number: '',
     state: '',
     city: '',
     current_address: '',
@@ -28,10 +27,10 @@ export default function UserU() {
   const navigate = useNavigate();
 
   const stateOptions = [
-    {label: 'Punjab', value: 'Punjab'},
-    {label: 'Sindh', value: 'Sindh'},
-    {label: 'Balochistan', value: 'Balochistan'},
-    {label: 'KPK', value: 'KPK'},
+    { label: 'Punjab', value: 'Punjab' },
+    { label: 'Sindh', value: 'Sindh' },
+    { label: 'Balochistan', value: 'Balochistan' },
+    { label: 'KPK', value: 'KPK' },
   ];
 
   const maritalOptions = [
@@ -72,6 +71,7 @@ export default function UserU() {
       }
     } catch (error) {
       setLoading(false);
+      console.log('error in catch: ',error);
       toast.current.show({
         severity: 'error',
         summary: 'Error',

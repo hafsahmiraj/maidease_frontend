@@ -215,3 +215,40 @@
 .book-button:hover {
     background-color: #0056b3;
 }
+.form-group {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.form-group input,
+.form-group select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.edit-form input,
+.edit-form select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px; /* Ensure consistent padding */
+    font-size: 16px; /* Match font size */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 50px; /* Ensure consistent height */
+}
+
+select {
+    appearance: none; /* Consistent dropdown styling across browsers */
+    background-color: #fff;
+    padding: 12px; /* Match padding with input fields */
+    height: 50px; /* Match height with input fields */
+    font-size: 16px; /* Match font size with input fields */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
