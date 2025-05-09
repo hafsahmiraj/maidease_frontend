@@ -1,6 +1,7 @@
 import {useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {Dropdown} from "primereact/dropdown";
+import {MultiSelect} from "primereact/multiselect";
 import {Toast} from "primereact/toast";
 import {ProgressSpinner} from "primereact/progressspinner";
 import "./login.css";
@@ -30,6 +31,11 @@ export default function LoginM() {
     const toast = useRef(null);
     const navigate = useNavigate();
 
+    const genderOptions = [
+        {label: "Male", value: "Male"},
+        {label: "Female", value: "Female"},
+    ];
+
     const stateOptions = [
         {label: "Punjab", value: "Punjab"},
         {label: "Sindh", value: "Sindh"},
@@ -43,17 +49,27 @@ export default function LoginM() {
         {label: "Widow", value: "Widow"},
     ];
 
-    const experienceOptions = [
-        {label: "1 Year", value: "1"},
-        {label: "2 Years", value: "2"},
-        {label: "3 Years", value: "3"},
-        {label: "4 Years", value: "4"},
-        {label: "5 Years", value: "5"},
+    const skillsOptions = [
+        {label: "Cleaning", value: "Cleaning"},
+        {label: "Cooking", value: "Cooking"},
+        {label: "Babysitting", value: "Babysitting"},
+        {label: "Laundry", value: "Laundry"},
     ];
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData((prev) => ({...prev, [name]: value}));
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: name === "experience" ? parseFloat(value) : value,
+        }));
+    };
+
+    const handleMultiSelectChange = (e) => {
+        const selectedSkills = e.value;
+        setFormData((prev) => ({
+            ...prev,
+            skills: JSON.stringify(selectedSkills),
+        }));
     };
 
     const handleFileChange = (e) => {
@@ -70,7 +86,7 @@ export default function LoginM() {
 
     const validateForm = () => {
         for (const key in formData) {
-            if (!formData[key]) {
+            if (!formData[key] && key !== "job_type") {
                 toast.current.show({
                     severity: "error",
                     summary: "Validation Error",
@@ -90,7 +106,7 @@ export default function LoginM() {
             const response = await fetch("http://localhost:5000/api/maids/signup", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(formData),
+                body: JSON.stringify({...formData, job_type: ""}),
             });
 
             const data = await response.json();
@@ -181,6 +197,13 @@ export default function LoginM() {
                                                onChange={handleInputChange} required/>
                                         <input type="password" name="password" placeholder="Password"
                                                onChange={handleInputChange} required/>
+                                        <Dropdown
+                                            value={formData.gender}
+                                            onChange={(e) => setFormData((prev) => ({...prev, gender: e.value}))}
+                                            options={genderOptions}
+                                            placeholder="Select Gender"
+                                            className="w-full"
+                                        />
                                         <input type="text" name="cnic_number" placeholder="CNIC Number"
                                                onChange={handleInputChange} required/>
                                         <input type="text" name="contact_number" placeholder="Contact Number"
@@ -197,7 +220,7 @@ export default function LoginM() {
                                             value={formData.state}
                                             onChange={(e) => setFormData((prev) => ({...prev, state: e.value}))}
                                             options={stateOptions}
-                                            placeholder="Select State"
+                                            placeholder="Select Provience"
                                             className="w-full"
                                         />
                                         <Dropdown
@@ -210,17 +233,25 @@ export default function LoginM() {
                                             placeholder="Marital Status"
                                             className="w-full"
                                         />
-                                        <Dropdown
-                                            value={formData.experience}
-                                            onChange={(e) => setFormData((prev) => ({...prev, experience: e.value}))}
-                                            options={experienceOptions}
-                                            placeholder="Experience"
-                                            className="w-full"
+                                        <input
+                                            type="number"
+                                            step="0.1"
+                                            name="experience"
+                                            placeholder="Experience (in years)"
+                                            onChange={handleInputChange}
+                                            required
                                         />
                                     </>
                                 )}
                                 {signupStep === 2 && (
                                     <>
+                                        <MultiSelect
+                                            value={JSON.parse(formData.skills || "[]")}
+                                            options={skillsOptions}
+                                            onChange={handleMultiSelectChange}
+                                            placeholder="Select Skills"
+                                            className="w-full"
+                                        />
                                         <label htmlFor="profile_photo">Upload Profile Photo</label>
                                         <input type="file" name="profile_photo" onChange={handleFileChange} required/>
                                         <label htmlFor="cnic_photo_front">Upload CNIC Front</label>
