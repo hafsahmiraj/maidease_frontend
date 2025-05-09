@@ -14,7 +14,7 @@ export default function UserU() {
     password: '',
     gender: '',
     cnic_number: '',
-    state: '',
+    District: '',
     city: '',
     current_address: '',
     marital_Status: '',
@@ -26,16 +26,18 @@ export default function UserU() {
   const toast = useRef(null);
   const navigate = useNavigate();
 
-  const stateOptions = [
+  const DistrictOptions = [
     { label: 'Punjab', value: 'Punjab' },
     { label: 'Sindh', value: 'Sindh' },
     { label: 'Balochistan', value: 'Balochistan' },
     { label: 'KPK', value: 'KPK' },
+    { label: 'Other', value: 'Other' },
   ];
 
   const maritalOptions = [
     {label: 'Single', value: 'Single'},
     {label: 'Married', value: 'Married'},
+    {label: 'Widow', value: 'Widow'},
   ];
 
   const handleInputChange = (e) => {
@@ -136,10 +138,10 @@ export default function UserU() {
                       <input type="text" name="current_address" placeholder="Address" onChange={handleInputChange}
                              required/>
                       <Dropdown
-                          value={formData.state}
-                          onChange={(e) => setFormData({...formData, state: e.value})}
-                          options={stateOptions}
-                          placeholder="Select State"
+                          value={formData.District}
+                          onChange={(e) => setFormData({...formData, District: e.value})}
+                          options={DistrictOptions}
+                          placeholder="Select District"
                           className="w-full"
                           required
                       />
