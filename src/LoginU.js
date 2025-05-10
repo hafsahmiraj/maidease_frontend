@@ -69,7 +69,7 @@ export default function UserU() {
         localStorage.setItem('userType', 'USER');
         navigate('/Useredit');
       } else {
-        toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
+        toast.current.seshow({verity: 'error', summary: 'Error', detail: response.data.message});
       }
     } catch (error) {
       setLoading(false);
@@ -97,7 +97,7 @@ export default function UserU() {
         const data = response.data;
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user.id);
-        navigate('/Useredit');
+        navigate(`/Useredit/${data.user.id}`);
       } else {
         toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
       }

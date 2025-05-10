@@ -1,4 +1,4 @@
-import {React,Effect, useState } from 'react';
+import React,{useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
 import './ProfilePageM.css';
