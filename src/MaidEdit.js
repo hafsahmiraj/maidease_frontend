@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-    import { useNavigate } from "react-router-dom";
+    import {useNavigate, useParams} from "react-router-dom";
     import { Toast } from "primereact/toast";
     import { Rating } from "primereact/rating";
     import { ProgressSpinner } from "primereact/progressspinner";
     import "./ProfilePageM.css";
 
     export default function MaidEditPage() {
+      const { userId } = useParams();
       const navigate = useNavigate();
       const [maid, setMaid] = useState(null);
       const [editing, setEditing] = useState(false);
@@ -21,7 +22,7 @@ import React, { useEffect, useState } from "react";
           const token = localStorage.getItem("token");
           try {
             setLoading(true);
-            const response = await fetch("http://localhost:5000/api/maids/profile/4", {
+            const response = await fetch("http://localhost:5000/api/maids/profile/"+userId, {
               headers: { Authorization: `Bearer ${token}` },
             });
             const data = await response.json();

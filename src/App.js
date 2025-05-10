@@ -43,7 +43,7 @@ function App() {
           <Route path="/Maidnav" element={<MaidNav />} />
           <Route path="/Usernav" element={<UserNav />} />
           <Route path="/LoginM" element={<LoginM />} />
-          <Route path="/Maidedit" element={<MaidEdit />} />
+          <Route path="/Maidedit/:userId" element={<MaidEdit />} />
           <Route path="/Useredit/:userId" element={<UserEdit />} />
           
         </Routes>

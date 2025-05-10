@@ -115,12 +115,13 @@ export default function LoginM() {
             if (response.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("userId", data.maid.id);
+                localStorage.setItem("userRole", "MAID");
                 toast.current.show({
                     severity: "success",
                     summary: "Success",
                     detail: data.message,
                 });
-                navigate("/Maidedit");
+                navigate("/Maidedit"+ data.maid.id);
             } else {
                 toast.current.show({
                     severity: "error",
@@ -155,13 +156,14 @@ export default function LoginM() {
 
             if (response.ok) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("userId", data.user.id);
+                localStorage.setItem("userId", data.maid.id);
+                localStorage.setItem("userRole", "MAID");
                 toast.current.show({
                     severity: "success",
                     summary: "Success",
                     detail: "Login successful",
                 });
-                navigate("/Maidedit");
+                navigate("/Maidedit/" + data.maid.id);
             } else {
                 toast.current.show({
                     severity: "error",
