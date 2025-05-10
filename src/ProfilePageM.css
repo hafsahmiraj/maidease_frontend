@@ -242,6 +242,14 @@
     height: 50px; /* Ensure consistent height */
 }
 
+.cnic-images{
+    display: flex;
+    gap: 10px;
+    align-content: flex-start;
+    flex-direction: row;
+    max-width: 41%;
+}
+
 select {
     appearance: none; /* Consistent dropdown styling across browsers */
     background-color: #fff;
