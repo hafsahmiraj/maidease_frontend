@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import {Dropdown} from "primereact/dropdown";
+import {MultiSelect} from "primereact/multiselect";
 import {Toast} from "primereact/toast";
 import {Rating} from "primereact/rating";
 import {ProgressSpinner} from "primereact/progressspinner";
@@ -10,12 +12,32 @@ export default function MaidEditPage() {
   const navigate = useNavigate();
   const [maid, setMaid] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
   const [loading, setLoading] = useState(false);
-      const [genderOptions] = useState(["Male", "Female", "Other"]);
-      const [maritalStatusOptions] = useState(["Single", "Married"]);
-      const [stateOptions] = useState(["Punjab", "Sindh", "Balochistan", "KPK"]);
   const toast = React.useRef(null);
+
+  const genderOptions = [
+    {label: "Male", value: "Male"},
+    {label: "Female", value: "Female"},
+  ];
+
+  const stateOptions = [
+    {label: "Punjab", value: "Punjab"},
+    {label: "Sindh", value: "Sindh"},
+    {label: "Balochistan", value: "Balochistan"},
+    {label: "KPK", value: "KPK"},
+  ];
+
+  const maritalOptions = [
+    {label: "Single", value: "Single"},
+    {label: "Married", value: "Married"},
+  ];
+
+  const skillsOptions = [
+    {label: "Cleaning", value: "Cleaning"},
+    {label: "Cooking", value: "Cooking"},
+    {label: "Babysitting", value: "Babysitting"},
+    {label: "Laundry", value: "Laundry"},
+  ];
 
   useEffect(() => {
     const fetchMaidData = async () => {
@@ -56,12 +78,23 @@ export default function MaidEditPage() {
     setMaid((prev) => ({...prev, [name]: value}));
   };
 
-  const handleImageChange = (e) => {
+  const handleDropdownChange = (name, value) => {
+    setMaid((prev) => ({...prev, [name]: value}));
+  };
+
+  const handleMultiSelectChange = (e) => {
+    setMaid((prev) => ({...prev, skills: e.value}));
+  };
+
+  const handleFileChange = (e) => {
+    const {name} = e.target;
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
-      setMaid((prev) => ({...prev, profile_photo: file.name}));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMaid((prev) => ({...prev, [name]: reader.result}));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -121,7 +154,7 @@ export default function MaidEditPage() {
           <div className="profile-grid">
             <div className="profile-left">
               <img
-                  src={previewImage || maid.profile_photo}
+                  src={maid.profile_photo}
                   alt={maid.full_name}
                   className="profile-main-img"
               />
@@ -139,19 +172,6 @@ export default function MaidEditPage() {
                     style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
                 />
               </div>
-              {editing && (
-                  <div className="image-upload">
-                    <label htmlFor="imageUpload" className="upload-label">
-                      Change Image:
-                    </label>
-                    <input
-                        type="file"
-                        id="imageUpload"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                    />
-                  </div>
-              )}
             </div>
             <div className="profile-right">
               <div className="edit-header">
@@ -246,6 +266,7 @@ export default function MaidEditPage() {
                     <label>
                       Full Name:{" "}
                       <input
+                          type="text"
                           name="full_name"
                           value={maid.full_name}
                           onChange={handleChange}
@@ -254,100 +275,121 @@ export default function MaidEditPage() {
                     <label>
                       Email:{" "}
                       <input
+                          type="email"
                           name="email"
                           value={maid.email}
                           onChange={handleChange}
                       />
                     </label>
                     <label>
-                      Contact:{" "}
-                      <input
-                          name="contact_number"
-                          value={maid.contact_number}
-                          onChange={handleChange}
+                      Gender:
+                      <Dropdown
+                          value={maid.gender}
+                          options={genderOptions}
+                          onChange={(e) =>
+                              handleDropdownChange("gender", e.value)
+                          }
+                          placeholder="Select Gender"
                       />
                     </label>
                     <label>
-                      CNIC:{" "}
+                      CNIC Number:
                       <input
+                          type="text"
                           name="cnic_number"
                           value={maid.cnic_number}
                           onChange={handleChange}
                       />
                     </label>
                     <label>
-                      City:{" "}
+                      Contact Number:
                       <input
+                          type="text"
+                          name="contact_number"
+                          value={maid.contact_number}
+                          onChange={handleChange}
+                      />
+                    </label>
+                    <label>
+                      State:
+                      <Dropdown
+                          value={maid.state}
+                          options={stateOptions}
+                          onChange={(e) =>
+                              handleDropdownChange("state", e.value)
+                          }
+                          placeholder="Select State"
+                      />
+                    </label>
+                    <label>
+                      City:
+                      <input
+                          type="text"
                           name="city"
                           value={maid.city}
                           onChange={handleChange}
                       />
                     </label>
                     <label>
-                      Address:{" "}
+                      Current Address:
                       <input
+                          type="text"
                           name="current_address"
                           value={maid.current_address}
                           onChange={handleChange}
                       />
                     </label>
                     <label>
-                      State:
-                      <select
-                          name="state"
-                          value={maid.state}
-                          onChange={handleChange}
-                      >
-                        {["Punjab", "Sindh", "Balochistan", "KPK"].map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      Gender:
-                      <select
-                          name="gender"
-                          value={maid.gender}
-                          onChange={handleChange}
-                      >
-                        {["Male", "Female", "Other"].map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
                       Marital Status:
-                      <select
-                          name="marital_Status"
+                      <Dropdown
                           value={maid.marital_Status}
-                          onChange={handleChange}
-                      >
-                        {["Single", "Married"].map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                        ))}
-                      </select>
+                          options={maritalOptions}
+                          onChange={(e) =>
+                              handleDropdownChange("marital_Status", e.value)
+                          }
+                          placeholder="Select Marital Status"
+                      />
                     </label>
                     <label>
-                      Experience:{" "}
+                      Experience (in years):
                       <input
-                          name="experience"
                           type="number"
+                          name="experience"
                           value={maid.experience}
                           onChange={handleChange}
                       />
                     </label>
                     <label>
-                      Skills:{" "}
-                      <input
-                          name="skills"
+                      Skills:
+                      <MultiSelect
                           value={maid.skills}
-                          onChange={handleChange}
+                          options={skillsOptions}
+                          onChange={handleMultiSelectChange}
+                          placeholder="Select Skills"
+                      />
+                    </label>
+                    <label>
+                      Profile Photo:
+                      <input
+                          type="file"
+                          name="profile_photo"
+                          onChange={handleFileChange}
+                      />
+                    </label>
+                    <label>
+                      CNIC Photo Front:
+                      <input
+                          type="file"
+                          name="cnic_photo_front"
+                          onChange={handleFileChange}
+                      />
+                    </label>
+                    <label>
+                      CNIC Photo Back:
+                      <input
+                          type="file"
+                          name="cnic_photo_back"
+                          onChange={handleFileChange}
                       />
                     </label>
                     <button className="save-btn" onClick={handleSave}>
