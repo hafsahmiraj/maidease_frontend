@@ -67,7 +67,7 @@ export default function UserU() {
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userWithoutPassword.id);
         localStorage.setItem('userType', 'USER');
-        navigate('/Useredit');
+        window.location.href = "/Useredit" + data.user.id;
       } else {
         toast.current.seshow({verity: 'error', summary: 'Error', detail: response.data.message});
       }
@@ -97,7 +97,7 @@ export default function UserU() {
         const data = response.data;
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user.id);
-        navigate(`/Useredit/${data.user.id}`);
+        window.location.href = `/Useredit/${data.user.id}`;
       } else {
         toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
       }

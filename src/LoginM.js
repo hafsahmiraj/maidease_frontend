@@ -129,10 +129,11 @@ export default function LoginM() {
       }
     } catch (error) {
       setLoading(false);
+      console.log('error in catch: ',error);
       toast.current.show({
         severity: "error",
         summary: "Error",
-        detail: "Something went wrong",
+        detail: error.response?.data?.message || "Something went wrong",
       });
     }
   };
