@@ -7,7 +7,7 @@ import "primeicons/primeicons.css";
 import HomePage from "./HomePage";
 import MaidProfilePage from "./MaidProfilePage";
 import Navbar from "./Navbar";
-import UserEdit from "./UserEdit";
+import UserEdit from './components/UserEdit';
 import MaidEdit from "./MaidEdit";
 import LoginM from "./LoginM";
 import LoginU from "./LoginU";
@@ -43,6 +43,7 @@ function App() {
           <Route path="/Maidnav" element={<MaidNav />} />
           <Route path="/Usernav" element={<UserNav />} />
           <Route path="/LoginM" element={<LoginM />} />
+          <Route path="/useredit/:userId" element={<UserEdit />}/>
           <Route path="/Maidedit/:userId" element={<MaidEdit />} />
           <Route path="/Useredit/:userId" element={<UserEdit />} />
           
