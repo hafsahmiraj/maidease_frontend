@@ -4,15 +4,22 @@ import {Dropdown} from "primereact/dropdown";
 import {MultiSelect} from "primereact/multiselect";
 import {Toast} from "primereact/toast";
 import {Rating} from "primereact/rating";
+import {Password} from "primereact/password";
 import {ProgressSpinner} from "primereact/progressspinner";
+import {TabPanel, TabView} from "primereact/tabview";
 import "./ProfilePageM.css";
 
 export default function MaidEditPage() {
   const {userId} = useParams();
-  const navigate = useNavigate();
   const [maid, setMaid] = useState(null);
-  const [editing, setEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState(0); // 0 for Profile View, 1 for Edit Profile, 2 for Reset Password
   const [loading, setLoading] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    repeatNewPassword: "",
+  });
+  const [ratingsSummary, setRatingsSummary] = useState([]);
   const toast = React.useRef(null);
 
   const genderOptions = [
@@ -70,7 +77,23 @@ export default function MaidEditPage() {
         });
       }
     };
+
+    const fetchRatingsSummary = async () => {
+      try {
+        const response = await fetch(
+            `http://localhost:5000/api/maids/hire/rating/maid/${userId}`
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setRatingsSummary(data.ratings);
+        }
+      } catch (error) {
+        console.error("Failed to fetch ratings summary");
+      }
+    };
+
     fetchMaidData();
+    fetchRatingsSummary();
   }, [userId]);
 
   const handleChange = (e) => {
@@ -121,7 +144,6 @@ export default function MaidEditPage() {
           summary: "Success",
           detail: "Profile updated successfully",
         });
-        setEditing(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -139,9 +161,72 @@ export default function MaidEditPage() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handlePasswordChange = (e) => {
+    const {name, value} = e.target;
+    setPasswordData((prev) => ({...prev, [name]: value}));
+  };
+
+  const handleResetPassword = async () => {
+    const {oldPassword, newPassword, repeatNewPassword} = passwordData;
+    if (!oldPassword || !newPassword || !repeatNewPassword) {
+      toast.current.show({
+        severity: "error",
+        summary: "Validation Error",
+        detail: "All fields are required",
+      });
+      return;
+    }
+    if (newPassword !== repeatNewPassword) {
+      toast.current.show({
+        severity: "error",
+        summary: "Validation Error",
+        detail: "New passwords do not match",
+      });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    try {
+      setLoading(true);
+      const response = await fetch(
+          "http://localhost:5000/api/maids/update-password",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({oldPassword, newPassword}),
+          }
+      );
+      const result = await response.json();
+      setLoading(false);
+      if (response.ok) {
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Password updated successfully",
+        });
+        setPasswordData({
+          oldPassword: "",
+          newPassword: "",
+          repeatNewPassword: "",
+        });
+      } else {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: result.message || "Failed to update password",
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Something went wrong",
+      });
+    }
   };
 
   if (!maid) return <div>Loading...</div>;
@@ -172,32 +257,33 @@ export default function MaidEditPage() {
                     style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
                 />
               </div>
+              <div className="ratings-summary">
+                <h3>Ratings Summary</h3>
+                {[5, 4, 3, 2, 1].map((stars) => {
+                  const rating = ratingsSummary.find((r) => r.stars === stars) || { value: 0 };
+                  return (
+                    <div key={stars} className="rating-row" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Rating value={stars} readOnly stars={5} cancel={false} />
+                      <span>({rating.value})</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
             <div className="profile-right">
-              <div className="edit-header">
-                <h2>{maid.full_name}</h2>
-                <button
-                    className="edit-btn"
-                    onClick={() => setEditing(!editing)}
-                >
-                  {editing ? "Cancel" : "Edit"}
-                </button>
-                <button className="logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </div>
-              <div className="rating-wrapper">
-                <Rating
-                    value={maid.averageRating || 0}
-                    readOnly
-                    cancel={false}
-                    stars={5}
-                />
-                <span className="rating-number">
+              <TabView activeIndex={activeTab} onTabChange={(e) => setActiveTab(e.index)}>
+                <TabPanel header="Profile View">
+                  <div className="rating-wrapper">
+                    <Rating
+                        value={maid.averageRating || 0}
+                        readOnly
+                        cancel={false}
+                        stars={5}
+                    />
+                    <span className="rating-number">
                     ({(maid.averageRating || 0).toFixed(1)})
                   </span>
-              </div>
-              {!editing ? (
+                  </div>
                   <div className="profile-details">
                     <h3>Personal Info</h3>
                     <p>
@@ -261,7 +347,8 @@ export default function MaidEditPage() {
                       </span>
                     </p>
                   </div>
-              ) : (
+                </TabPanel>
+                <TabPanel header="Edit Profile">
                   <div className="edit-form">
                     <label>
                       Full Name:{" "}
@@ -273,12 +360,12 @@ export default function MaidEditPage() {
                       />
                     </label>
                     <label>
-                      Email:{" "}
+                      Email:
                       <input
                           type="email"
                           name="email"
                           value={maid.email}
-                          onChange={handleChange}
+                          disabled
                       />
                     </label>
                     <label>
@@ -298,7 +385,7 @@ export default function MaidEditPage() {
                           type="text"
                           name="cnic_number"
                           value={maid.cnic_number}
-                          onChange={handleChange}
+                          disabled
                       />
                     </label>
                     <label>
@@ -396,7 +483,42 @@ export default function MaidEditPage() {
                       Save
                     </button>
                   </div>
-              )}
+                </TabPanel>
+                <TabPanel header="Reset Password">
+                  <div className="edit-form">
+                    <label>
+                      Old Password:
+                      <Password
+                          name="oldPassword"
+                          value={passwordData.oldPassword}
+                          onChange={handlePasswordChange}
+                          toggleMask
+                      />
+                    </label>
+                    <label>
+                      New Password:
+                      <Password
+                          name="newPassword"
+                          value={passwordData.newPassword}
+                          onChange={handlePasswordChange}
+                          toggleMask
+                      />
+                    </label>
+                    <label>
+                      Repeat New Password:
+                      <Password
+                          name="repeatNewPassword"
+                          value={passwordData.repeatNewPassword}
+                          onChange={handlePasswordChange}
+                          toggleMask
+                      />
+                    </label>
+                    <button className="save-btn" onClick={handleResetPassword}>
+                      Submit
+                    </button>
+                  </div>
+                </TabPanel>
+              </TabView>
             </div>
           </div>
         </div>
