@@ -50,7 +50,9 @@ export default function UserEditPage() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token");
+      const token = getTokenOrNavigateToLoginPage();
+      if (!token) return;
+
       try {
         setLoading(true);
         const response = await fetch(
@@ -81,9 +83,15 @@ export default function UserEditPage() {
     };
 
     const fetchRatingsSummary = async () => {
+      const token = getTokenOrNavigateToLoginPage();
+      if (!token) return;
+
       try {
         const response = await fetch(
-            `http://localhost:5000/api/maids/hire/rating/user/${userId}`
+            `http://localhost:5000/api/maids/hire/rating/user/${userId}`,
+            {
+              headers: {Authorization: `Bearer ${token}`},
+            }
         );
         const data = await response.json();
         if (response.ok) {
