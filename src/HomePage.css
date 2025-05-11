@@ -69,6 +69,13 @@ html, body {
   border: 2px solid #eee;
 }
 
+.maid-skills{
+  margin-top: 1rem;
+}
+.maid-skills .p-tag{
+  margin-right: 2px;
+}
+
 .maid-name {
   font-size: 1.25rem;
   font-weight: 600;
