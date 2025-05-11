@@ -50,8 +50,11 @@ export default function LoginM() {
   const skillsOptions = [
     {label: "Cleaning", value: "Cleaning"},
     {label: "Cooking", value: "Cooking"},
+    {label: "Washing dishes", value: "Washing dishes"},
     {label: "Babysitting", value: "Babysitting"},
     {label: "Laundry", value: "Laundry"},
+    {label: "Gardening", value: "Gardening"},
+    {label: "Full Time", value: "Full Time"},
   ];
 
   const handleInputChange = (e) => {

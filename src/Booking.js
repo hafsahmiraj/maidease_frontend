@@ -1,138 +1,165 @@
 import React, { useState, useEffect } from "react";
-import './booking.css';
-import { Avatar } from 'primereact/avatar';
-import { Checkbox } from 'primereact/checkbox';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ProductService } from './MaidProfilePage';
+        import './booking.css';
+        import { MultiSelect } from 'primereact/multiselect';
+        import { useParams, useNavigate } from 'react-router-dom';
+        import axios from 'axios';
 
-export default function Booking() {
-    const navigate = useNavigate();
-    const [skills, setSkills] = useState([]);
-    const [maid, setMaid] = useState(null);
-    const [showReceipt, setShowReceipt] = useState(false);
-    const { maidId } = useParams();
+        export default function Booking() {
+            const navigate = useNavigate();
+            const { maidId } = useParams();
+            const [maid, setMaid] = useState(null);
+            const [skillsOptions, setSkillsOptions] = useState([]);
+            const [selectedSkills, setSelectedSkills] = useState([]);
+            const [houseDetails, setHouseDetails] = useState({
+                house_size: '',
+                no_of_portions: '',
+                no_of_peoples: '',
+                preferred_work_time: '',
+                house_photo: null,
+            });
+            const [loading, setLoading] = useState(false);
 
-    const skillsWithPrices = {
-        cleaning: 500,
-        cooking: 400,
-        washing_dishes: 300,
-        babysitting: 600,
-        laundry: 350,
-        others: 200,
-    };
+            // Pricing list for skills
+            const pricingList = [
+                { value: "Cleaning", amount: 2000 },
+                { value: "Cooking", amount: 1500 },
+                { value: "Washing dishes", amount: 2500 },
+                { value: "Babysitting", amount: 5000 },
+                { value: "Laundry", amount: 3000 },
+                { value: "Gardening", amount: 2000 },
+                { value: "Full Time", amount: 12000 },
+            ];
 
-    useEffect(() => {
-        ProductService.getProducts().then((data) => {
-            const selected = data.find(item => item.id === maidId);
-            setMaid(selected);
-        });
-    }, [maidId]);
+            const PLATFORM_CHARGES = 500;
 
-    const calculateTotal = () => {
-        return skills.reduce((total, skill) => total + skillsWithPrices[skill], 0);
-    };
+            useEffect(() => {
+                // Fetch maid details
+                const fetchMaidDetails = async () => {
+                    try {
+                        const response = await axios.get(`http://localhost:5000/api/maids/${maidId}`);
+                        setMaid(response.data);
+                        setSkillsOptions(response.data.skills.map(skill => ({ label: skill, value: skill })));
+                    } catch (error) {
+                        console.error("Error fetching maid details:", error);
+                    }
+                };
+                fetchMaidDetails();
+            }, [maidId]);
 
-    const onSkillsChange = (e) => {
-        const _skills = [...skills];
-        if (e.checked) _skills.push(e.value);
-        else _skills.splice(_skills.indexOf(e.value), 1);
-        setSkills(_skills);
-    };
+            const handleFileChange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setHouseDetails({ ...houseDetails, house_photo: reader.result });
+                };
+                reader.readAsDataURL(file);
+            };
 
-    if (!maid) return <div>Loading...</div>;
+            const calculateTotal = () => {
+                return selectedSkills.reduce((total, skill) => {
+                    const skillData = pricingList.find((s) => s.value === skill);
+                    return total + (skillData ? skillData.amount : 0);
+                }, 0);
+            };
 
-    return (
-        <div className="booking-page-wrapper">
-            <div className="booking-container-bookingpage">
-                
-                {/* Left Side: Form */}
-                <div className="booking-form-bookingpage">
-                    <h2>Booking</h2>
-                    <form className="booking-form-layout">
-                       <div className="maid-photo-wrapper">
-  <img src={`/${maid.image}`} alt="Maid" className="maid-photo" />
-</div>
+            const handleSubmit = async () => {
+                setLoading(true);
+                try {
+                    await axios.post('http://localhost:5000/api/maids/hire', {
+                        maid_id: maidId,
+                        house_size: houseDetails.house_size,
+                        no_of_portions: houseDetails.no_of_portions,
+                        no_of_peoples: houseDetails.no_of_peoples,
+                        hired_skills: JSON.stringify(selectedSkills),
+                        preferred_work_time: houseDetails.preferred_work_time,
+                        house_photo: houseDetails.house_photo,
+                        total_amount: calculateTotal(),
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    setLoading(false);
+                    navigate('/checkout');
+                } catch (error) {
+                    setLoading(false);
+                    console.error("Error submitting booking:", error);
+                }
+            };
 
-                        <fieldset>
-                            <label htmlFor="maid_name">Maid Name</label>
-                            <input type="text" name="maid_name" value={maid.name} readOnly />
+            if (!maid) return <div>Loading...</div>;
 
-                            <label htmlFor="house_size">House Size (in Marla)</label>
-                            <input type="number" name="house_size" placeholder="Enter house size" required />
+            return (
+                <div className="booking-page-wrapper">
+                    <div className="booking-container-bookingpage">
+                        <div className="booking-form-bookingpage">
+                            <h2>Booking</h2>
+                            <form className="booking-form-layout">
+                                <div className="maid-photo-wrapper">
+                                    <img src={maid.profile_photo} alt="Maid" className="maid-photo" />
+                                </div>
+                                <fieldset>
+                                    <label htmlFor="maid_name">Maid Name</label>
+                                    <input type="text" name="maid_name" value={maid.full_name} readOnly />
 
-                            <label htmlFor="portions">Number of Portions</label>
-                            <input type="number" name="portions" placeholder="Enter number of portions" required />
+                                    <label htmlFor="house_size">House Size (in Marla)</label>
+                                    <input type="number" name="house_size" placeholder="Enter house size" value={houseDetails.house_size} onChange={(e) => setHouseDetails({ ...houseDetails, house_size: e.target.value })} required />
 
-                            <label htmlFor="people_living">No. of People Living</label>
-                            <input type="number" name="people_living" placeholder="Enter number of residents" required />
+                                    <label htmlFor="portions">Number of Portions</label>
+                                    <input type="number" name="portions" placeholder="Enter number of portions" value={houseDetails.no_of_portions} onChange={(e) => setHouseDetails({ ...houseDetails, no_of_portions: e.target.value })} required />
 
-                            <div className="form-section-booking">
-                                <label className="section-label">Maid Needed For (Skills)</label>
-                                <div className="checkbox-group-booking">
-                                    {Object.keys(skillsWithPrices).map((skill, idx) => (
-                                        <div key={idx} className="checkbox-item-booking">
-                                            <Checkbox inputId={`skill${idx}`} name="skills" value={skill} onChange={onSkillsChange} checked={skills.includes(skill)} />
-                                            <label htmlFor={`skill${idx}`}>{skill.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}</label>
-                                        </div>
-                                    ))}
+                                    <label htmlFor="people_living">No. of People Living</label>
+                                    <input type="number" name="people_living" placeholder="Enter number of residents" value={houseDetails.no_of_peoples} onChange={(e) => setHouseDetails({ ...houseDetails, no_of_peoples: e.target.value })} required />
+
+                                    <label htmlFor="skills">Maid Needed For (Skills)</label>
+                                    <MultiSelect
+                                        value={selectedSkills}
+                                        options={skillsOptions}
+                                        onChange={(e) => setSelectedSkills(e.value)}
+                                        placeholder="Select Skills"
+                                        display="chip"
+                                        className="w-full"
+                                    />
+                                    <div>
+                                    <label htmlFor="timing">Preferred Timing of Work</label>
+                                    <input type="text" name="timing" placeholder="e.g. 9AM - 5PM" value={houseDetails.preferred_work_time} onChange={(e) => setHouseDetails({ ...houseDetails, preferred_work_time: e.target.value })} required />
+                                    </div>
+                                    <label htmlFor="house_photo">Upload House Photo</label>
+                                    <input id="house_photo" type="file" name="house_photo" accept="image/*" onChange={handleFileChange} required />
+                                </fieldset>
+                            </form>
+
+                            <button className="complete-btn-booking" onClick={handleSubmit} disabled={loading}>
+                                {loading ? 'Submitting...' : 'Complete'}
+                            </button>
+                        </div>
+
+                        <div className="booking-receipt-bookingpage">
+                            <div className="receipt-content">
+                                <h2>Receipt</h2>
+                                <div className="skills-list-booking">
+                                    <div className="skills-header-booking">
+                                        <span>Skill</span>
+                                        <span>Amount</span>
+                                    </div>
+                                    {selectedSkills.map((skill, index) => {
+                                        const skillData = pricingList.find((s) => s.value === skill);
+                                        return (
+                                            <div key={index} className="skill-item-booking">
+                                                <span>{skill}</span>
+                                                <span>${skillData ? skillData.amount : 0}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <div className="total-amount-booking">
+                                    <span>Total Amount:</span>
+                                    <span>${calculateTotal()}</span>
                                 </div>
                             </div>
-
-                            <label className="section-label">Job Type</label>
-                            <div className="radio-group-booking">
-                                <div><input type="radio" id="full_time" name="job_type" value="full_time" required /><label htmlFor="full_time">Full-Time (On Site)</label></div>
-                                <div><input type="radio" id="hourly" name="job_type" value="hourly" required /><label htmlFor="hourly">Hourly</label></div>
-                                <div><input type="radio" id="both" name="job_type" value="both" required /><label htmlFor="both">Both</label></div>
-                            </div>
-
-                            <label htmlFor="timing">Preferred Timing of Work</label>
-                            <input type="text" name="timing" placeholder="e.g. 9AM - 5PM" required />
-
-                            <label htmlFor="house_photo">Upload House Photo</label>
-                            <input id="house_photo" type="file" name="house_photo" accept="image/*" required />
-                        </fieldset>
-                    </form>
-
-                    <button className="complete-btn-booking" onClick={() => setShowReceipt(true)}>Complete</button>
-                </div>
-
-                {/* Right Side: Always visible, shows receipt only when form is completed */}
-               <div className="booking-receipt-bookingpage">
-    {!showReceipt ? (
-        <div className="waiting-placeholder">
-            <img src="/waiting1.png" alt="Waiting for booking" style={{ width: '100%', maxWidth: '1200px',height: '450px', margin: '0 auto', display: 'block' }} />
-            <p style={{ textAlign: 'center', marginTop: '10px' }}>Your booking summary will appear here after completing the form.</p>
-        </div>
-    ) : (
-        <div className="receipt-content">
-            <h2>Receipt</h2>
-
-            <div className="skills-list-booking">
-                <div className="skills-header-booking">
-                    <span>Skill</span>
-                    <span>Amount</span>
-                </div>
-                {skills.map((skill, index) => (
-                    <div key={index} className="skill-item-booking">
-                        <span>{skill.charAt(0).toUpperCase() + skill.slice(1)}</span>
-                        <span>${skillsWithPrices[skill]}</span>
+                        </div>
                     </div>
-                ))}
-            </div>
-
-            <div className="total-amount-booking">
-                <span>Total Amount:</span>
-                <span>${calculateTotal()}</span>
-            </div>
-
-            <div className="checkout-button">
-                <button type="submit" onClick={() => navigate('/checkout')}>Checkout</button>
-            </div>
-        </div>
-    )}
-</div>
-
-            </div>
-        </div>
-    );
-}
+                </div>
+            );
+        }
