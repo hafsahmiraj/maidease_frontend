@@ -1,211 +1,192 @@
 import React, { useState, useEffect } from 'react';
-import { ProductService } from './MaidProfilePage';
-import { Rating } from 'primereact/rating';
-import { useNavigate } from 'react-router-dom';
-import { Paginator } from 'primereact/paginator';
-import { Dropdown } from 'primereact/dropdown';
-import Navbar from './Navbar';
-import './HomePage.css'
-// src/service/ProductService.js
+    import { Rating } from 'primereact/rating';
+    import { Paginator } from 'primereact/paginator';
+    import { Dropdown } from 'primereact/dropdown';
+    import './HomePage.css';
+    import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
 
+    export default function HomePage() {
+        const [first, setFirst] = useState(0);
+        const [rows, setRows] = useState(10);
+        const [maids, setMaids] = useState([]);
+        const [sortKey, setSortKey] = useState(null);
 
+        const sortOptions = [
+            { label: 'Name: A to Z', value: 'nameAsc' },
+            { label: 'Name: Z to A', value: 'nameDesc' },
+        ];
 
-export default function HomePage() {
-  const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(10);
+        const areaSortOptions = [
+            { label: 'Area: A to Z', value: 'areaAsc' },
+            { label: 'Area: Z to A', value: 'areaDesc' },
+        ];
 
-  const onPageChange = (event) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
+        const skillsSortOptions = [
+            { label: 'Skills: A to Z', value: 'skillsAsc' },
+            { label: 'Skills: Z to A', value: 'skillsDesc' },
+        ];
 
-  const [maids, setMaids] = useState([]);
-  const navigate = useNavigate();
+        const onPageChange = (event) => {
+            setFirst(event.first);
+            setRows(event.rows);
+        };
 
-  const [sortKey, setSortKey] = useState('');
-  const [sortOrder, setSortOrder] = useState(0);
-  const [sortField, setSortField] = useState('');
+        const onSortChange = (e) => {
+            setSortKey(e.value);
+        };
 
-  const sortOptions = [
-    { label: 'Price High to Low', value: '!price' },
-    { label: 'Price Low to High', value: 'price' }
-  ];
+        const sortedMaids = () => {
+            if (!sortKey) return maids;
 
-  const areaSortOptions = [
-    { label: 'Area A to Z', value: 'area' },
-    { label: 'Area Z to A', value: '!area' }
-  ];
+            const sorted = [...maids];
+            if (sortKey === 'nameAsc') {
+                sorted.sort((a, b) => a.full_name.localeCompare(b.full_name));
+            } else if (sortKey === 'nameDesc') {
+                sorted.sort((a, b) => b.full_name.localeCompare(a.full_name));
+            } else if (sortKey === 'areaAsc') {
+                sorted.sort((a, b) => a.city.localeCompare(b.city));
+            } else if (sortKey === 'areaDesc') {
+                sorted.sort((a, b) => b.city.localeCompare(a.city));
+            } else if (sortKey === 'skillsAsc') {
+                sorted.sort((a, b) => a.skills.join(', ').localeCompare(b.skills.join(', ')));
+            } else if (sortKey === 'skillsDesc') {
+                sorted.sort((a, b) => b.skills.join(', ').localeCompare(a.skills.join(', ')));
+            }
+            return sorted;
+        };
 
-  const skillsSortOptions = [
-    { label: 'Cleaning', value: 'skills' },
-    { label: 'Cooking', value: 'skills' },
-    { label: 'BabySitting', value: 'skills' },
-    { label: 'DishWashing', value: 'skills' },
-    { label: 'Ironing', value: '!skills' },
-    { label: 'Laundary', value: '!skills' }
-  ];
+        useEffect(() => {
+            // Fetch maid data from API
+            const fetchMaids = async () => {
+                try {
+                    const response = await fetch('http://localhost:5000/api/maids');
+                    const data = await response.json();
+                    setMaids(data);
+                } catch (error) {
+                    console.error('Error fetching maids:', error);
+                }
+            };
+            fetchMaids();
+        }, []);
 
-  useEffect(() => {
-    ProductService.getProducts().then((data) => {
-      // Manually assign fake 'skills' for sorting
-      const updatedMaids = data.map(maid => ({
-        ...maid,
-        skills: extractSkill(maid.description)
-      }));
+        const handleCardClick = (maidId) => {
+            window.location.href = `/maid/${maidId}`;
+        };
 
-      setMaids(updatedMaids);
-    });
-  }, []);
-
-  const extractSkill = (description) => {
-    // Basic skill extraction from description text
-    if (!description) return 'General';
-    if (description.toLowerCase().includes('cooking')) return 'Cooking';
-    if (description.toLowerCase().includes('babysitting')) return 'Babysitting';
-    if (description.toLowerCase().includes('cleaning')) return 'Cleaning';
-    if (description.toLowerCase().includes('elderly')) return 'Elderly Care';
-    if (description.toLowerCase().includes('laundry')) return 'Laundry';
-    return 'General';
-  };
-
-  const handleCardClick = (maidId) => {
-    navigate(`/maid/${maidId}`);
-  };
-
-
-
-
-  const onSortChange = (event) => {
-    const value = event.value;
-
-    if (value.indexOf('!') === 0) {
-      setSortOrder(-1);
-      setSortField(value.substring(1));
-      setSortKey(value);
-    } else {
-      setSortOrder(1);
-      setSortField(value);
-      setSortKey(value);
-    }
-  };
-
-  const sortedMaids = () => {
-    let sorted = [...maids];
-    if (sortField) {
-      sorted.sort((a, b) => {
-        let aField = a[sortField] || '';
-        let bField = b[sortField] || '';
-
-        if (typeof aField === 'string') aField = aField.toLowerCase();
-        if (typeof bField === 'string') bField = bField.toLowerCase();
-
-        if (aField < bField) return -1 * sortOrder;
-        if (aField > bField) return 1 * sortOrder;
-        return 0;
-      });
-    }
-    return sorted;
-  };
-
-  return (
-    <>
-      <div className="top-banner">
-        <video
-          className="top-banner-video"
-          src="/maid-banner.mp4" // adjust path as needed
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        <div className="top-banner-text">
-          <h1 className="banner-heading">Find Trusted Maids Near You</h1>
-          <p className="banner-subheading">Book skilled and verified help anytime, anywhere in Pakistan</p>
-        </div>
-
-
-        <div className="p-4">
-
-          {/* SORTING DROPDOWNS */}
-          <div className="sorting-filters">
-            <Dropdown
-              options={sortOptions}
-              value={sortKey}
-              onChange={onSortChange}
-              placeholder="Sort by Price"
-              className="sort-dropdown"
-              optionLabel="label"
-            />
-            <Dropdown
-              options={areaSortOptions}
-              value={sortKey}
-              onChange={onSortChange}
-              placeholder="Sort by Area"
-              className="sort-dropdown"
-              optionLabel="label"
-            />
-            <Dropdown
-              options={skillsSortOptions}
-              value={sortKey}
-              onChange={onSortChange}
-              placeholder="Sort by Skills"
-              className="sort-dropdown"
-              optionLabel="label"
-            />
-          </div>
-
-          {/* MAID CARDS */}
-          <div className="cards-grid">
-            {sortedMaids().map((maid) => (
-              <div
-                key={maid.id}
-                className="maid-card-wrapper"
-              >
-                <div
-                  className="maid-card"
-                  onClick={() => handleCardClick(maid.id)}
-                >
-                  <div style={{ position: 'relative' }}>
-                    <img
-                      src={`/${maid.image}`}
-                      alt={maid.name}
-                      className="maid-main-img"
+        return (
+            <>
+                <div className="top-banner">
+                    <video
+                        className="top-banner-video"
+                        src="/maid-banner.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
                     />
-
-                  </div>
-                  <div className="maid-card-content">
-                    <div className="maid-header">
-                      <img
-                        src={`/${maid.image}`}
-                        alt={maid.name}
-                        className="maid-avatar"
-                      />
-                      <div className="maid-name">{maid.name}</div>
+                    <div className="top-banner-text">
+                        <h1 className="banner-heading">Find Trusted Maids Near You</h1>
+                        <p className="banner-subheading">Book skilled and verified help anytime, anywhere in Pakistan</p>
                     </div>
-                    <div className="maid-description">{maid.description}</div>
-                    <div className="maid-bottom">
-                      <Rating value={maid.rating} readOnly cancel={false} stars={5} />
-                      <div className="price-text">From PKR {maid.price}</div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
 
-          {/* PAGINATOR */}
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={maids.length}
-            rowsPerPageOptions={[10, 20, 30]}
-            onPageChange={onPageChange}
-          />
-        </div>
-      </div>
-    </>
-  );
+                <div className="p-4">
+                    {/* SORTING DROPDOWNS */}
+                    <div className="sorting-filters">
+                        <Dropdown
+                            options={sortOptions}
+                            value={sortKey}
+                            onChange={onSortChange}
+                            placeholder="Sort by Name"
+                            className="sort-dropdown"
+                            optionLabel="label"
+                        />
+                        <Dropdown
+                            options={areaSortOptions}
+                            value={sortKey}
+                            onChange={onSortChange}
+                            placeholder="Sort by Area"
+                            className="sort-dropdown"
+                            optionLabel="label"
+                        />
+                        <Dropdown
+                            options={skillsSortOptions}
+                            value={sortKey}
+                            onChange={onSortChange}
+                            placeholder="Sort by Skills"
+                            className="sort-dropdown"
+                            optionLabel="label"
+                        />
+                    </div>
 
+                    {/* MAID CARDS */}
+                    <div className="cards-grid">
+                        {sortedMaids().slice(first, first + rows).map((maid) => (
+                            <div
+                                key={maid.id}
+                                className="maid-card-wrapper"
+                            >
+                                <div
+                                    className="maid-card"
+                                    onClick={() => handleCardClick(maid.id)}
+                                >
+                                    <div style={{ position: 'relative' }}>
+                                        <img
+                                            src={maid.profile_photo}
+                                            alt={maid.full_name}
+                                            className="maid-main-img"
+                                        />
+                                    </div>
+                                    <div className="maid-card-content">
+                                        <div className="maid-header">
+                                            <img
+                                                src={maid.profile_photo}
+                                                alt={maid.full_name}
+                                                className="maid-avatar"
+                                            />
+                                            <div className="maid-name">{maid.full_name}</div>
+                                        </div>
+                                        <div className="maid-description">
+                                            {maid.profile_description || 'No description available'}
+                                        </div>
+                                        <div className="maid-bottom">
+                                            <Rating
+                                                value={maid.averageRating}
+                                                readOnly
+                                                cancel={false}
+                                                stars={5}
+                                            />
+                                            <div className="average-rating">
+                                                {maid.averageRating > 0
+                                                    ? `Average Rating: ${maid.averageRating}`
+                                                    : 'No ratings yet'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
-}
+                    {/* PAGINATOR */}
+                    <Paginator
+                        first={first}
+                        rows={rows}
+                        totalRecords={maids.length}
+                        rowsPerPageOptions={[10, 20, 30]}
+                        onPageChange={onPageChange}
+                    />
+                </div>
 
+                {/* FOOTER */}
+                <footer className="footer">
+                    <div className="social-icons">
+                        <a href="https://facebook.com"><FaFacebook size={20} /></a>
+                        <a href="https://twitter.com"><FaTwitter size={20} /></a>
+                        <a href="https://instagram.com"><FaInstagram size={20} /></a>
+                    </div>
+                    <p>&copy; 2025 MaidEase. All rights reserved.</p>
+                </footer>
+            </>
+        );
+    }
