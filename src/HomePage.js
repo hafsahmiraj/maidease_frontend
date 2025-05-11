@@ -131,6 +131,7 @@ import React, { useState, useEffect } from 'react';
                                     onClick={() => handleCardClick(maid.id)}
                                 >
                                     <div style={{ position: 'relative' }}>
+                                        {/* Profile Picture */}
                                         <img
                                             src={maid.profile_photo}
                                             alt={maid.full_name}
@@ -139,6 +140,7 @@ import React, { useState, useEffect } from 'react';
                                     </div>
                                     <div className="maid-card-content">
                                         <div className="maid-header">
+                                            {/* Avatar */}
                                             <img
                                                 src={maid.profile_photo}
                                                 alt={maid.full_name}
@@ -146,10 +148,12 @@ import React, { useState, useEffect } from 'react';
                                             />
                                             <div className="maid-name">{maid.full_name}</div>
                                         </div>
+                                        {/* Description */}
                                         <div className="maid-description">
                                             {maid.profile_description || 'No description available'}
                                         </div>
                                         <div className="maid-bottom">
+                                            {/* Rating */}
                                             <Rating
                                                 value={maid.averageRating}
                                                 readOnly
