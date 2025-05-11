@@ -12,6 +12,7 @@ import "./ProfilePageM.css";
 export default function MaidEditPage() {
   const {userId} = useParams();
   const [maid, setMaid] = useState(null);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0); // 0 for Profile View, 1 for Edit Profile, 2 for Reset Password
   const [loading, setLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
@@ -46,9 +47,20 @@ export default function MaidEditPage() {
     {label: "Laundry", value: "Laundry"},
   ];
 
+  const getTokenOrNavigateToLoginPage = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login/maid");
+      return null;
+    }
+    return token;
+  };
+
   useEffect(() => {
     const fetchMaidData = async () => {
-      const token = localStorage.getItem("token");
+      const token = getTokenOrNavigateToLoginPage();
+      if (!token) return;
+
       try {
         setLoading(true);
         const response = await fetch(
@@ -122,7 +134,9 @@ export default function MaidEditPage() {
   };
 
   const handleSave = async () => {
-    const token = localStorage.getItem("token");
+    const token = getTokenOrNavigateToLoginPage();
+    if (!token) return;
+
     try {
       setLoading(true);
       const response = await fetch(
@@ -185,7 +199,9 @@ export default function MaidEditPage() {
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = getTokenOrNavigateToLoginPage();
+    if (!token) return;
+
     try {
       setLoading(true);
       const response = await fetch(
@@ -460,22 +476,6 @@ export default function MaidEditPage() {
                       <input
                           type="file"
                           name="profile_photo"
-                          onChange={handleFileChange}
-                      />
-                    </label>
-                    <label>
-                      CNIC Photo Front:
-                      <input
-                          type="file"
-                          name="cnic_photo_front"
-                          onChange={handleFileChange}
-                      />
-                    </label>
-                    <label>
-                      CNIC Photo Back:
-                      <input
-                          type="file"
-                          name="cnic_photo_back"
                           onChange={handleFileChange}
                       />
                     </label>

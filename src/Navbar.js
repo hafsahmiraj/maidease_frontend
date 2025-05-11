@@ -13,6 +13,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
+    window.location.href = "/";
   };
 
   return (
