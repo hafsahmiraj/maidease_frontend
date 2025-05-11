@@ -1,40 +1,39 @@
-import React, {useState, useEffect} from 'react';
-import {Rating} from 'primereact/rating';
-import {Paginator} from 'primereact/paginator';
-import {Dropdown} from 'primereact/dropdown';
+import React, { useState, useEffect } from 'react';
+import { Rating } from 'primereact/rating';
+import { Paginator } from 'primereact/paginator';
+import { Dropdown } from 'primereact/dropdown';
 import './HomePage.css';
-import {Tag} from 'primereact/tag';
-import {MultiSelect} from 'primereact/multiselect';
-import {FaFacebook, FaInstagram, FaTwitter} from 'react-icons/fa';
+import { Tag } from 'primereact/tag';
+import { MultiSelect } from 'primereact/multiselect';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 export default function HomePage() {
     const [first, setFirst] = useState(0);
     const [rows, setRows] = useState(10);
     const [maids, setMaids] = useState([]);
     const [sortKey, setSortKey] = useState(null);
+    const [filteredMaids, setFilteredMaids] = useState([]);
+    const [selectedSkills, setSelectedSkills] = useState([]);
 
     const sortOptions = [
-        {label: 'Name: A to Z', value: 'nameAsc'},
-        {label: 'Name: Z to A', value: 'nameDesc'},
+        { label: 'Name: A to Z', value: 'nameAsc' },
+        { label: 'Name: Z to A', value: 'nameDesc' },
     ];
 
     const areaSortOptions = [
-        {label: 'Area: A to Z', value: 'areaAsc'},
-        {label: 'Area: Z to A', value: 'areaDesc'},
+        { label: 'Area: A to Z', value: 'areaAsc' },
+        { label: 'Area: Z to A', value: 'areaDesc' },
     ];
-
 
     const skillsSortOptions = [
-        {label: "Cleaning", value: "Cleaning"},
-        {label: "Cooking", value: "Cooking"},
-        {label: "Washing dishes", value: "Washing dishes"},
-        {label: "Babysitting", value: "Babysitting"},
-        {label: "Laundry", value: "Laundry"},
-        {label: "Gardening", value: "Gardening"},
-        {label: "Full Time", value: "Full Time"},
+        { label: "Cleaning", value: "Cleaning" },
+        { label: "Cooking", value: "Cooking" },
+        { label: "Washing dishes", value: "Washing dishes" },
+        { label: "Babysitting", value: "Babysitting" },
+        { label: "Laundry", value: "Laundry" },
+        { label: "Gardening", value: "Gardening" },
+        { label: "Full Time", value: "Full Time" },
     ];
-
-    const [selectedSkills, setSelectedSkills] = useState([]);
 
     const onSkillsChange = (e) => {
         setSelectedSkills(e.value);
@@ -50,9 +49,9 @@ export default function HomePage() {
     };
 
     const sortedMaids = () => {
-        if (!sortKey) return maids;
+        if (!sortKey) return filteredMaids;
 
-        const sorted = [...maids];
+        const sorted = [...filteredMaids];
         if (sortKey === 'nameAsc') {
             sorted.sort((a, b) => a.full_name.localeCompare(b.full_name));
         } else if (sortKey === 'nameDesc') {
@@ -61,10 +60,6 @@ export default function HomePage() {
             sorted.sort((a, b) => a.city.localeCompare(b.city));
         } else if (sortKey === 'areaDesc') {
             sorted.sort((a, b) => b.city.localeCompare(a.city));
-        } else if (sortKey === 'skillsAsc') {
-            sorted.sort((a, b) => a.skills.join(', ').localeCompare(b.skills.join(', ')));
-        } else if (sortKey === 'skillsDesc') {
-            sorted.sort((a, b) => b.skills.join(', ').localeCompare(a.skills.join(', ')));
         }
         return sorted;
     };
@@ -82,6 +77,19 @@ export default function HomePage() {
         };
         fetchMaids();
     }, []);
+
+    useEffect(() => {
+        // Filter maids based on selected skills
+        if (selectedSkills.length > 0) {
+            setFilteredMaids(
+                maids.filter((maid) =>
+                    maid.skills.some((skill) => selectedSkills.includes(skill))
+                )
+            );
+        } else {
+            setFilteredMaids(maids);
+        }
+    }, [maids, selectedSkills]);
 
     const handleCardClick = (maidId) => {
         window.location.href = `/maid/${maidId}`;
@@ -144,7 +152,7 @@ export default function HomePage() {
                                 className="maid-card"
                                 onClick={() => handleCardClick(maid.id)}
                             >
-                                <div style={{position: 'relative'}}>
+                                <div style={{ position: 'relative' }}>
                                     {/* Profile Picture */}
                                     <img
                                         src={maid.profile_photo}
@@ -168,7 +176,7 @@ export default function HomePage() {
                                     </div>
                                     <div className="maid-skills">
                                         {maid.skills.map((skill, index) => (
-                                            <Tag key={index} value={skill} className="p-mr-2 p-mb-2"/>
+                                            <Tag key={index} value={skill} className="p-mr-2 p-mb-2" />
                                         ))}
                                     </div>
                                     <div className="maid-bottom">
@@ -195,7 +203,7 @@ export default function HomePage() {
                 <Paginator
                     first={first}
                     rows={rows}
-                    totalRecords={maids.length}
+                    totalRecords={filteredMaids.length}
                     rowsPerPageOptions={[10, 20, 30]}
                     onPageChange={onPageChange}
                 />
@@ -204,9 +212,9 @@ export default function HomePage() {
             {/* FOOTER */}
             <footer className="footer">
                 <div className="social-icons">
-                    <a href="https://facebook.com"><FaFacebook size={20}/></a>
-                    <a href="https://twitter.com"><FaTwitter size={20}/></a>
-                    <a href="https://instagram.com"><FaInstagram size={20}/></a>
+                    <a href="https://facebook.com"><FaFacebook size={20} /></a>
+                    <a href="https://twitter.com"><FaTwitter size={20} /></a>
+                    <a href="https://instagram.com"><FaInstagram size={20} /></a>
                 </div>
                 <p>&copy; 2025 MaidEase. All rights reserved.</p>
             </footer>
