@@ -1,38 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { Rating } from 'primereact/rating';
-import { Paginator } from 'primereact/paginator';
-import { Dropdown } from 'primereact/dropdown';
+import React, {useState, useEffect} from 'react';
+import {Rating} from 'primereact/rating';
+import {Paginator} from 'primereact/paginator';
+import {Dropdown} from 'primereact/dropdown';
+import {InputText} from 'primereact/inputtext';
 import './HomePage.css';
-import { Tag } from 'primereact/tag';
-import { MultiSelect } from 'primereact/multiselect';
-import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import {Tag} from 'primereact/tag';
+import {MultiSelect} from 'primereact/multiselect';
+import {FaFacebook, FaInstagram, FaTwitter} from 'react-icons/fa';
 
 export default function HomePage() {
     const [first, setFirst] = useState(0);
     const [rows, setRows] = useState(10);
     const [maids, setMaids] = useState([]);
-    const [sortKey, setSortKey] = useState(null);
     const [filteredMaids, setFilteredMaids] = useState([]);
     const [selectedSkills, setSelectedSkills] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const sortOptions = [
-        { label: 'Name: A to Z', value: 'nameAsc' },
-        { label: 'Name: Z to A', value: 'nameDesc' },
-    ];
-
-    const areaSortOptions = [
-        { label: 'Area: A to Z', value: 'areaAsc' },
-        { label: 'Area: Z to A', value: 'areaDesc' },
+        {label: 'Name: A to Z', value: 'nameAsc'},
+        {label: 'Name: Z to A', value: 'nameDesc'},
     ];
 
     const skillsSortOptions = [
-        { label: "Cleaning", value: "Cleaning" },
-        { label: "Cooking", value: "Cooking" },
-        { label: "Washing dishes", value: "Washing dishes" },
-        { label: "Babysitting", value: "Babysitting" },
-        { label: "Laundry", value: "Laundry" },
-        { label: "Gardening", value: "Gardening" },
-        { label: "Full Time", value: "Full Time" },
+        {label: "Cleaning", value: "Cleaning"},
+        {label: "Cooking", value: "Cooking"},
+        {label: "Washing dishes", value: "Washing dishes"},
+        {label: "Babysitting", value: "Babysitting"},
+        {label: "Laundry", value: "Laundry"},
+        {label: "Gardening", value: "Gardening"},
+        {label: "Full Time", value: "Full Time"},
     ];
 
     const onSkillsChange = (e) => {
@@ -44,24 +40,30 @@ export default function HomePage() {
         setRows(event.rows);
     };
 
-    const onSortChange = (e) => {
-        setSortKey(e.value);
+    const onSearchChange = (e) => {
+        setSearchTerm(e.target.value.toLowerCase());
     };
 
-    const sortedMaids = () => {
-        if (!sortKey) return filteredMaids;
+    const filteredAndSearchedMaids = () => {
+        let filtered = maids;
 
-        const sorted = [...filteredMaids];
-        if (sortKey === 'nameAsc') {
-            sorted.sort((a, b) => a.full_name.localeCompare(b.full_name));
-        } else if (sortKey === 'nameDesc') {
-            sorted.sort((a, b) => b.full_name.localeCompare(a.full_name));
-        } else if (sortKey === 'areaAsc') {
-            sorted.sort((a, b) => a.city.localeCompare(b.city));
-        } else if (sortKey === 'areaDesc') {
-            sorted.sort((a, b) => b.city.localeCompare(a.city));
+        // Filter by skills
+        if (selectedSkills.length > 0) {
+            filtered = filtered.filter((maid) =>
+                maid.skills.some((skill) => selectedSkills.includes(skill))
+            );
         }
-        return sorted;
+
+        // Filter by search term
+        if (searchTerm) {
+            filtered = filtered.filter((maid) =>
+                maid.city.toLowerCase().includes(searchTerm) ||
+                maid.state.toLowerCase().includes(searchTerm) ||
+                maid.current_address.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        return filtered;
     };
 
     useEffect(() => {
@@ -71,25 +73,13 @@ export default function HomePage() {
                 const response = await fetch('http://localhost:5000/api/maids');
                 const data = await response.json();
                 setMaids(data);
+                setFilteredMaids(data);
             } catch (error) {
                 console.error('Error fetching maids:', error);
             }
         };
         fetchMaids();
     }, []);
-
-    useEffect(() => {
-        // Filter maids based on selected skills
-        if (selectedSkills.length > 0) {
-            setFilteredMaids(
-                maids.filter((maid) =>
-                    maid.skills.some((skill) => selectedSkills.includes(skill))
-                )
-            );
-        } else {
-            setFilteredMaids(maids);
-        }
-    }, [maids, selectedSkills]);
 
     const handleCardClick = (maidId) => {
         window.location.href = `/maid/${maidId}`;
@@ -113,21 +103,11 @@ export default function HomePage() {
             </div>
 
             <div className="p-4">
-                {/* SORTING DROPDOWNS */}
+                {/* SORTING AND SEARCH FILTERS */}
                 <div className="sorting-filters">
                     <Dropdown
                         options={sortOptions}
-                        value={sortKey}
-                        onChange={onSortChange}
                         placeholder="Sort by Name"
-                        className="sort-dropdown"
-                        optionLabel="label"
-                    />
-                    <Dropdown
-                        options={areaSortOptions}
-                        value={sortKey}
-                        onChange={onSortChange}
-                        placeholder="Sort by Area"
                         className="sort-dropdown"
                         optionLabel="label"
                     />
@@ -139,11 +119,17 @@ export default function HomePage() {
                         display="chip"
                         className="w-full"
                     />
+                    <InputText
+                        value={searchTerm}
+                        onChange={onSearchChange}
+                        placeholder="Search by province, city, or location"
+                        className="search-bar"
+                    />
                 </div>
 
                 {/* MAID CARDS */}
                 <div className="cards-grid">
-                    {sortedMaids().slice(first, first + rows).map((maid) => (
+                    {filteredAndSearchedMaids().slice(first, first + rows).map((maid) => (
                         <div
                             key={maid.id}
                             className="maid-card-wrapper"
@@ -152,7 +138,7 @@ export default function HomePage() {
                                 className="maid-card"
                                 onClick={() => handleCardClick(maid.id)}
                             >
-                                <div style={{ position: 'relative' }}>
+                                <div style={{position: 'relative'}}>
                                     {/* Profile Picture */}
                                     <img
                                         src={maid.profile_photo}
@@ -176,7 +162,7 @@ export default function HomePage() {
                                     </div>
                                     <div className="maid-skills">
                                         {maid.skills.map((skill, index) => (
-                                            <Tag key={index} value={skill} className="p-mr-2 p-mb-2" />
+                                            <Tag key={index} value={skill} className="p-mr-2 p-mb-2"/>
                                         ))}
                                     </div>
                                     <div className="maid-bottom">
@@ -200,10 +186,10 @@ export default function HomePage() {
                 </div>
 
                 {/* PAGINATOR */}
-                <Paginator
+                <Paginator className="paginator"
                     first={first}
                     rows={rows}
-                    totalRecords={filteredMaids.length}
+                    totalRecords={filteredAndSearchedMaids().length}
                     rowsPerPageOptions={[10, 20, 30]}
                     onPageChange={onPageChange}
                 />
@@ -212,9 +198,9 @@ export default function HomePage() {
             {/* FOOTER */}
             <footer className="footer">
                 <div className="social-icons">
-                    <a href="https://facebook.com"><FaFacebook size={20} /></a>
-                    <a href="https://twitter.com"><FaTwitter size={20} /></a>
-                    <a href="https://instagram.com"><FaInstagram size={20} /></a>
+                    <a href="https://facebook.com"><FaFacebook size={20}/></a>
+                    <a href="https://twitter.com"><FaTwitter size={20}/></a>
+                    <a href="https://instagram.com"><FaInstagram size={20}/></a>
                 </div>
                 <p>&copy; 2025 MaidEase. All rights reserved.</p>
             </footer>
