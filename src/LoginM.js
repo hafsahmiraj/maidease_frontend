@@ -99,6 +99,14 @@ export default function LoginM() {
     return true;
   };
 
+  const storeUserDataAndRedirect = (data) => {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.maid.id);
+    localStorage.setItem('userType', 'MAID');
+    localStorage.setItem('userDetails', JSON.stringify(data.maid));
+    window.location.href = `/maidedit/${data.maid.id}`;
+  }
+
   const handleSignup = async () => {
     if (!validateForm()) return;
 
@@ -114,15 +122,7 @@ export default function LoginM() {
       setLoading(false);
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.maid.id);
-        localStorage.setItem("userType", "MAID");
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: data.message,
-        });
-        window.location.href = "/Maidedit" + data.maid.id;
+        storeUserDataAndRedirect(data);
       } else {
         toast.current.show({
           severity: "error",
@@ -157,15 +157,7 @@ export default function LoginM() {
       setLoading(false);
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.maid.id);
-        localStorage.setItem("userType", "MAID");
-        toast.current.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Login successful",
-        });
-        window.location.href = "/Maidedit/" + data.maid.id;
+        storeUserDataAndRedirect(data);
       } else {
         toast.current.show({
           severity: "error",
