@@ -2,12 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
 import './ProfilePageM.css';
+import RatingSummary from './components/UserEdit/components/RatingSummary';
+import ProfileImage from './components/UserEdit/components/ProfileImage';
 
 export default function MaidProfilePage() {
     const { maidId } = useParams();
     const [maid, setMaid] = useState(null);
-    const [ratingsSummary, setRatingsSummary] = useState([]); // Ensure it's initialized as an array
+    const [ratingsSummary, setRatingsSummary] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if the user is logged in by verifying the token
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+    }, []);
 
     useEffect(() => {
         // Fetch the specific maid's data from the API
@@ -24,7 +33,6 @@ export default function MaidProfilePage() {
         fetch(`http://localhost:5000/api/maids/hire/rating/maid/${maidId}`)
             .then((response) => response.json())
             .then((data) => {
-                // Ensure the response is an array
                 if (Array.isArray(data)) {
                     setRatingsSummary(data);
                 } else {
@@ -38,7 +46,11 @@ export default function MaidProfilePage() {
     if (!maid) return <div>Loading...</div>;
 
     const handleBooking = () => {
-        navigate(`/booking/${maid.id}`);
+        if (isLoggedIn) {
+            navigate(`/booking/${maid.id}`);
+        } else {
+            window.open('/login/User', '_blank');
+        }
     };
 
     return (
@@ -47,30 +59,8 @@ export default function MaidProfilePage() {
                 <div className="profile-card">
                     <div className="profile-grid">
                         <div className="profile-left">
-                            <img
-                                src={maid.profile_photo}
-                                alt={maid.full_name}
-                                className="profile-main-img"
-                            />
-                            <div className="rating-summary">
-                                <h3>Reviews</h3>
-                                <p>{maid.ratingCount} reviews for this maid</p>
-                                {[5, 4, 3, 2, 1].map((stars) => {
-                                    const ratingValue = ratingsSummary.find((r) => r.stars === stars)?.value || 0;
-                                    return (
-                                        <div key={stars} className="rating-bar">
-                                            <span>{stars} Stars</span>
-                                            <div className="bar">
-                                                <div
-                                                    className="fill"
-                                                    style={{ width: `${(ratingValue / maid.ratingCount) * 100 || 0}%` }}
-                                                ></div>
-                                            </div>
-                                            <span>({ratingValue})</span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                            <ProfileImage user={maid} />
+                            <RatingSummary ratingsSummary={ratingsSummary} />
                         </div>
 
                         <div className="profile-right">
@@ -123,7 +113,7 @@ export default function MaidProfilePage() {
                             </div>
 
                             <button className="book-button" onClick={handleBooking}>
-                                Book Now
+                                {isLoggedIn ? 'Book Now' : 'Login to Book'}
                             </button>
                         </div>
                     </div>

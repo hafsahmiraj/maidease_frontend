@@ -141,7 +141,7 @@ export default function HirePreview() {
       <div className="profile-card">
         <div className="profile-grid">
           <div className="profile-left">
-            <ProfileImage user={profileDetails} />
+            <ProfileImage user={profileDetails} isPrivate={true} />
             <RatingSummary ratingsSummary={ratingsSummary} />
           </div>
           <div className="profile-right">
