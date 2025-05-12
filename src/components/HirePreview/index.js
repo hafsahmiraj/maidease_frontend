@@ -65,7 +65,9 @@ export default function HirePreview() {
               ? `http://localhost:5000/api/maids/hire/rating/maid/${profileId}`
               : `http://localhost:5000/api/maids/hire/rating/user/${profileId}`;
 
-            const ratingsResponse = await fetch(ratingUrl);
+            const ratingsResponse = await fetch(ratingUrl, {
+              headers: userType !== "USER" ? { Authorization: `Bearer ${token}` } : {}
+            });
             const ratingsData = await ratingsResponse.json();
 
             if (ratingsResponse.ok) {

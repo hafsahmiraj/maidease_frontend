@@ -292,3 +292,13 @@ select {
 .p-rating {
   justify-content: center;
 }
+
+.rating-row-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.rating-label {
+  min-width: 110px;
+}
