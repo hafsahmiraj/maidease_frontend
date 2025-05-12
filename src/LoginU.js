@@ -54,6 +54,14 @@ export default function UserU() {
     reader.readAsDataURL(files[0]);
   };
 
+  const storeUserDataAndRedirect = (data) => {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.user.id);
+    localStorage.setItem('userType', 'USER');
+    localStorage.setItem('userDetails', JSON.stringify(data.user));
+    window.location.href = `/useredit/${data.user.id}`;
+  }
+
   const handleSignup = async () => {
     setLoading(true);
     try {
@@ -63,11 +71,7 @@ export default function UserU() {
       setLoading(false);
 
       if (response.status === 200) {
-        const data = response.data;
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.userWithoutPassword.id);
-        localStorage.setItem('userType', 'USER');
-        window.location.href = "/Useredit" + data.user.id;
+        storeUserDataAndRedirect(response.data);
       } else {
         toast.current.seshow({verity: 'error', summary: 'Error', detail: response.data.message});
       }
@@ -94,11 +98,7 @@ export default function UserU() {
       setLoading(false);
 
       if (response.status === 200) {
-        const data = response.data;
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.user.id);
-        localStorage.setItem('userType', 'USER');
-        window.location.href = `/Useredit/${data.user.id}`;
+        storeUserDataAndRedirect(response.data);
       } else {
         toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});
       }

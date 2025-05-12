@@ -105,3 +105,73 @@
   color: #333;
   text-decoration: none;
 }
+
+
+.custom-avatar-wrapper {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-avatar {
+    border: 2px solid #ccc;
+    background-color: transparent !important;
+    box-shadow: none;
+}
+
+.custom-avatar-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.user-profile-header {
+  width: 300px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-details {
+  overflow: hidden;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p-menu {
+  min-width: 300px !important;
+}
+
+.p-menu .p-menuitem-link {
+  padding: 0.75rem 1rem !important;
+}
+
+.p-menu .p-menuitem-icon {
+  margin-right: 0.75rem;
+}
+
+.profile-menu .p-menu-list {
+  padding: 0;
+}
