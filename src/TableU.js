@@ -4,6 +4,7 @@ import axios from 'axios';
 import {DataTable} from 'primereact/datatable';
 import {Column} from 'primereact/column';
 import {Button} from 'primereact/button';
+import {Rating} from 'primereact/rating';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -55,6 +56,14 @@ export default function TableU() {
         return userType === 'MAID' ? rowData.user.email : rowData.maid.email;
     };
 
+    const maidRatingTemplate = (rowData) => {
+        return <Rating value={rowData.maid_rating} readOnly cancel={false}/>;
+    };
+
+    const userRatingTemplate = (rowData) => {
+        return <Rating value={rowData.user_rating} readOnly cancel={false}/>;
+    };
+
     const actionTemplate = (rowData) => {
         return (
             <Button
@@ -68,7 +77,9 @@ export default function TableU() {
 
     return (
         <div className="table-container">
-            <h1>Hire Details</h1>
+            <h2>
+                {userType === 'MAID' ? 'Hiring requests received' : 'Maids You Requested to Hire'}
+            </h2>
             <DataTable
                 value={maidHires}
                 paginator
@@ -79,15 +90,20 @@ export default function TableU() {
                 emptyMessage="No hire details found."
             >
                 <Column field="id" header="ID" sortable></Column>
-                <Column body={nameTemplate} header="Name" sortable></Column>
-                <Column body={emailTemplate} header="Email" sortable></Column>
-                <Column field="payment_status" header="Payment" sortable></Column>
-                <Column field="acceptance_status" header="Status" sortable></Column>
                 <Column
-                    field={userType === 'MAID' ? 'user_rating' : 'maid_rating'}
-                    header="Reviews"
+                    body={nameTemplate}
+                    header={userType === 'MAID' ? 'User Name' : 'Maid Name'}
                     sortable
                 ></Column>
+                <Column
+                    body={emailTemplate}
+                    header={userType === 'MAID' ? 'User Email' : 'Maid Email'}
+                    sortable
+                ></Column>
+                <Column field="acceptance_status" header="Acceptance Status" sortable></Column>
+                <Column field="payment_status" header="Payment Status" sortable></Column>
+                <Column body={maidRatingTemplate} header="Maid Rating" sortable></Column>
+                <Column body={userRatingTemplate} header="User Rating" sortable></Column>
                 <Column body={actionTemplate} header="Actions"></Column>
             </DataTable>
         </div>
