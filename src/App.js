@@ -8,7 +8,7 @@ import HomePage from "./HomePage";
 import MaidProfilePage from "./MaidProfilePage";
 import Navbar from "./Navbar";
 import UserEdit from './components/UserEdit';
-import MaidEdit from "./MaidEdit";
+import MaidEditNew from './components/MaidEdit';
 import LoginM from "./LoginM";
 import LoginU from "./LoginU";
 import MaidNav from "./MaidNav";
@@ -17,12 +17,10 @@ import Aboutus from "./Aboutus";
 import Booking from "./Booking";
 import Tablemaid from "./Tablemaid";
 import TableU from "./TableU";
+import HirePreview from "./components/HirePreview";
+
 
 function App() {
-  // Set default userType only if not already set
-  if (!localStorage.getItem("userType")) {
-    localStorage.setItem("userType", "maid");
-  }
 
   return (
     <PrimeReactProvider>
@@ -43,10 +41,9 @@ function App() {
           <Route path="/Maidnav" element={<MaidNav />} />
           <Route path="/Usernav" element={<UserNav />} />
           <Route path="/LoginM" element={<LoginM />} />
+          <Route path="/maidedit/:userId" element={<MaidEditNew />} />
           <Route path="/useredit/:userId" element={<UserEdit />}/>
-          <Route path="/Maidedit/:userId" element={<MaidEdit />} />
-          <Route path="/Useredit/:userId" element={<UserEdit />} />
-          
+          <Route path="/hire-preview/:maidHireId" element={<HirePreview />} />
         </Routes>
       </Router>
     </PrimeReactProvider>

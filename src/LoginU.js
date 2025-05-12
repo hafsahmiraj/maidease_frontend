@@ -97,6 +97,7 @@ export default function UserU() {
         const data = response.data;
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('userType', 'USER');
         window.location.href = `/Useredit/${data.user.id}`;
       } else {
         toast.current.show({severity: 'error', summary: 'Error', detail: response.data.message});

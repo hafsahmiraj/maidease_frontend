@@ -116,7 +116,7 @@ export default function LoginM() {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.maid.id);
-        localStorage.setItem("userRole", "MAID");
+        localStorage.setItem("userType", "MAID");
         toast.current.show({
           severity: "success",
           summary: "Success",
@@ -159,7 +159,7 @@ export default function LoginM() {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.maid.id);
-        localStorage.setItem("userRole", "MAID");
+        localStorage.setItem("userType", "MAID");
         toast.current.show({
           severity: "success",
           summary: "Success",

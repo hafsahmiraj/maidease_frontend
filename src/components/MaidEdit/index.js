@@ -3,17 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Toast } from 'primereact/toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import ProfileView from './components/ProfileView';
 import EditProfileForm from './components/EditProfileForm';
-import ResetPassword from './components/ResetPassword';
-import ProfileImage from './components/ProfileImage';
-import RatingSummary from './components/RatingSummary';
-import './UserEdit.css';
+import ResetPassword from '../UserEdit/components/ResetPassword';
+import ProfileImage from '../UserEdit/components/ProfileImage';
+import RatingSummary from '../UserEdit/components/RatingSummary';
+import ProfileView from './components/ProfileView';
+import '../UserEdit/UserEdit.css';
 
-export default function UserEdit() {
+export default function MaidEditNew() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [maid, setMaid] = useState(null);
   const [ratingsSummary, setRatingsSummary] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -27,21 +27,21 @@ export default function UserEdit() {
   const getTokenOrNavigateToLoginPage = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login/user");
+      navigate("/login/maid");
       return null;
     }
     return token;
   };
 
   React.useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchMaidData = async () => {
       const token = getTokenOrNavigateToLoginPage();
       if (!token) return;
 
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/api/users/${userId}`,
+          `http://localhost:5000/api/maids/profile/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -49,12 +49,12 @@ export default function UserEdit() {
         const data = await response.json();
         setLoading(false);
         if (response.ok) {
-          setUser(data);
+          setMaid(data);
         } else {
           toast.current.show({
             severity: "error",
             summary: "Error",
-            detail: "Failed to fetch user data",
+            detail: "Failed to fetch maid data",
           });
         }
       } catch (error) {
@@ -73,10 +73,7 @@ export default function UserEdit() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/maids/hire/rating/user/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          `http://localhost:5000/api/maids/hire/rating/maid/${userId}`
         );
         const data = await response.json();
         if (response.ok) {
@@ -87,17 +84,21 @@ export default function UserEdit() {
       }
     };
 
-    fetchUserData();
+    fetchMaidData();
     fetchRatingsSummary();
-  }, [userId]);
+  }, [userId, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser(prev => ({ ...prev, [name]: value }));
+    setMaid(prev => ({ ...prev, [name]: value }));
   };
 
   const handleDropdownChange = (field, value) => {
-    setUser(prev => ({ ...prev, [field]: value }));
+    setMaid(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleMultiSelectChange = (e) => {
+    setMaid(prev => ({ ...prev, skills: e.value }));
   };
 
   const handleFileChange = (e) => {
@@ -106,7 +107,7 @@ export default function UserEdit() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUser(prev => ({ ...prev, [name]: reader.result }));
+        setMaid(prev => ({ ...prev, [name]: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -119,14 +120,14 @@ export default function UserEdit() {
     try {
       setLoading(true);
       const response = await fetch(
-        "http://localhost:5000/api/users/update-profile",
+        `http://localhost:5000/api/maids/update-profile`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(maid),
         }
       );
       const result = await response.json();
@@ -184,7 +185,7 @@ export default function UserEdit() {
     try {
       setLoading(true);
       const response = await fetch(
-        "http://localhost:5000/api/users/update-password",
+        `http://localhost:5000/api/maids/update-password`,
         {
           method: "PUT",
           headers: {
@@ -224,7 +225,7 @@ export default function UserEdit() {
     }
   };
 
-  if (!user) return <div>Loading...</div>;
+  if (!maid) return <div>Loading...</div>;
 
   return (
     <div className="profile-page">
@@ -233,33 +234,20 @@ export default function UserEdit() {
       <div className="profile-card">
         <div className="profile-grid">
           <div className="profile-left">
-            <ProfileImage user={user} />
+            <ProfileImage user={maid} />
             <RatingSummary ratingsSummary={ratingsSummary} />
           </div>
           <div className="profile-right">
             <TabView activeIndex={activeTab} onTabChange={(e) => setActiveTab(e.index)}>
               <TabPanel header="Profile View">
-                <ProfileView user={user} />
+                <ProfileView maid={maid} />
               </TabPanel>
               <TabPanel header="Edit Profile">
                 <EditProfileForm
-                  user={user}
-                  genderOptions={[
-                    { label: "Male", value: "Male" },
-                    { label: "Female", value: "Female" },
-                  ]}
-                  stateOptions={[
-                    { label: "Punjab", value: "Punjab" },
-                    { label: "Sindh", value: "Sindh" },
-                    { label: "Balochistan", value: "Balochistan" },
-                    { label: "KPK", value: "KPK" },
-                  ]}
-                  maritalOptions={[
-                    { label: "Single", value: "Single" },
-                    { label: "Married", value: "Married" },
-                  ]}
+                  maid={maid}
                   handleChange={handleChange}
                   handleDropdownChange={handleDropdownChange}
+                  handleMultiSelectChange={handleMultiSelectChange}
                   handleFileChange={handleFileChange}
                   handleSave={handleSave}
                 />
