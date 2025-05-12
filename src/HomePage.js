@@ -160,6 +160,12 @@ export default function HomePage() {
                                     <div className="maid-description">
                                         {maid.profile_title || 'No description available'}
                                     </div>
+                                    {/* Province, City, and Address */}
+                                    <div className="maid-location">
+                                        <p><strong>Province:</strong> {maid.state}</p>
+                                        <p><strong>City:</strong> {maid.city}</p>
+                                        <p><strong>Address:</strong> {maid.current_address}</p>
+                                    </div>
                                     <div className="maid-skills">
                                         {maid.skills.map((skill, index) => (
                                             <Tag key={index} value={skill} className="p-mr-2 p-mb-2"/>
@@ -187,11 +193,11 @@ export default function HomePage() {
 
                 {/* PAGINATOR */}
                 <Paginator className="paginator"
-                    first={first}
-                    rows={rows}
-                    totalRecords={filteredAndSearchedMaids().length}
-                    rowsPerPageOptions={[10, 20, 30]}
-                    onPageChange={onPageChange}
+                           first={first}
+                           rows={rows}
+                           totalRecords={filteredAndSearchedMaids().length}
+                           rowsPerPageOptions={[10, 20, 30]}
+                           onPageChange={onPageChange}
                 />
             </div>
 
