@@ -302,3 +302,12 @@ select {
 .rating-label {
   min-width: 110px;
 }
+
+.wide-rating-btn {
+  width: 100% !important;
+  max-width: 350px;
+  display: block;
+  font-size: 1.1rem;
+  padding: 0.9rem 0;
+  font-weight: bold;
+}
