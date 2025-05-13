@@ -54,6 +54,8 @@ export default function HiringDetailsView({hiringDetails, userType, onPayment, o
         }));
         setShowRatingDialog(false);
         setRatingValue(0);
+        // Refresh the whole component and re-trigger all API calls
+        window.location.reload();
       } else {
         setRatingError("Failed to submit rating.");
       }
