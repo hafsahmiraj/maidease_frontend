@@ -5,7 +5,7 @@ import {Toast} from "primereact/toast";
 import {ProgressSpinner} from "primereact/progressspinner";
 import "./login.css";
 
-export default function LoginM() {
+export default function MaidLogin() {
   const [signupStep, setSignupStep] = useState(0);
   const [formData, setFormData] = useState({
     full_name: "",

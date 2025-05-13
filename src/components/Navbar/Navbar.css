@@ -7,9 +7,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     justify-content: space-between;
     max-width: 100vw; /* ✅ Prevents overflow */
-  
 }
-
 
 .navbar-logo {
     height: 55px;
@@ -18,10 +16,6 @@
     border-radius: 50%;
     object-fit: cover;
 }
-
-
-
-
 
 .navbar-links {
     display: flex;
@@ -38,7 +32,6 @@
     font-weight: 500;
     transition: color 0.2s ease;
     font-family: 'Outfit', sans-serif;
-
 }
 
 .navbar-links a:hover {
@@ -48,8 +41,8 @@
 .navbar-links .sign-in {
     color: black;
     font-weight: 600;
-    
 }
+
 .navbar-links .sign-in:hover {
     color: rgb(158, 199, 234);
 }
@@ -85,11 +78,11 @@
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
 .navbar-left {
   display: flex;
   align-items: center;
 }
-
 
 .navbar-title {
     font-size: 2rem;
@@ -100,12 +93,10 @@
 }
 
 .navbar-right a {
- 
   margin-left: 20px;
   color: #333;
   text-decoration: none;
 }
-
 
 .custom-avatar-wrapper {
     position: relative;

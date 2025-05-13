@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Rating } from 'primereact/rating';
-import './ProfilePageM.css';
-import RatingSummary from './components/UserEdit/components/RatingSummary';
-import ProfileImage from './components/UserEdit/components/ProfileImage';
+import './MaidProfilePage.css';
+import RatingSummary from '../UserEdit/components/RatingSummary';
+import ProfileImage from '../UserEdit/components/ProfileImage';
 
 export default function MaidProfilePage() {
     const { maidId } = useParams();

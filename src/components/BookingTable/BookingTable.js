@@ -8,9 +8,9 @@ import {Rating} from 'primereact/rating';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import './tableu.css'; // Assuming the styling is in this file
+import './BookingTable.css'; // Assuming the styling is in this file
 
-export default function TableU() {
+export default function BookingTable() {
     const [maidHires, setMaidHires] = useState([]);
     const [userType, setUserType] = useState('');
     const [loading, setLoading] = useState(true);
