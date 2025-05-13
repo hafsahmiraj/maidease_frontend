@@ -1,22 +1,42 @@
-import React from 'react';
-import { Rating } from 'primereact/rating';
+import React, { useState, useEffect } from 'react';
+    import RatingSummary from './RatingSummary';
 
-export default function RatingSummary({ ratingsSummary }) {
-  console.log(ratingsSummary);
-  return (
-    <div className="ratings-summary">
-      <h3>Ratings Summary</h3>
-      <div className="ratings-list">
-        {["5 Star", "4 Star", "3 Star", "2 Star", "1 Star"].map((name) => {
-          const rating = ratingsSummary.find((r) => r.name === name) || { value: 0 };
-          return (
-            <div key={name} className="rating-row" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Rating value={parseInt(name[0], 10)} readOnly stars={5} cancel={false} />
-              <span>({rating.value})</span>
+    export default function ParentComponent() {
+        const [ratingsSummary, setRatingsSummary] = useState([]);
+        const [refreshKey, setRefreshKey] = useState(0); // Key to force re-render
+
+        const fetchRatingsSummary = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/ratings-summary');
+                const data = await response.json();
+                setRatingsSummary(data);
+            } catch (error) {
+                console.error('Error fetching ratings summary:', error);
+            }
+        };
+
+        useEffect(() => {
+            fetchRatingsSummary();
+        }, []);
+
+        const handleNewRating = async (newRating) => {
+            try {
+                await fetch('http://localhost:5000/api/add-rating', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newRating),
+                });
+                await fetchRatingsSummary(); // Refresh ratings summary
+                setRefreshKey((prevKey) => prevKey + 1); // Update key to force re-render
+            } catch (error) {
+                console.error('Error adding new rating:', error);
+            }
+        };
+
+        return (
+            <div>
+                <button onClick={() => handleNewRating({ rating: 5 })}>Add 5-Star Rating</button>
+                <RatingSummary key={refreshKey} ratingsSummary={ratingsSummary} />
             </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+        );
+    }

@@ -4,17 +4,17 @@ import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import HomePage from "../HomePage/HomePage";
-import MaidProfilePage from "../MaidProfilePage/MaidProfilePage";
-import Navbar from "../Navbar/Navbar";
-import UserEdit from '../UserEdit';
-import MaidEditNew from '../MaidEdit';
-import MaidLogin from "../Login/MaidLogin";
-import LoginU from "../Login/UserLogin";
-import Aboutus from "../AboutUs/Aboutus";
-import Booking from "../Booking/Booking";
-import BookingTable from "../BookingTable/BookingTable";
-import HirePreview from "../HirePreview";
+import HomePage from "./components/HomePage/HomePage";
+import MaidProfilePage from "./components/MaidProfilePage/MaidProfilePage";
+import Navbar from "./components/Navbar/Navbar";
+import UserEdit from './components/UserEdit';
+import MaidEditNew from './components/MaidEdit';
+import MaidLogin from "./components/Login/MaidLogin";
+import LoginU from "./components/Login/UserLogin";
+import Aboutus from "./components/AboutUs/Aboutus";
+import Booking from "./components/Booking/Booking";
+import BookingTable from "./components/BookingTable/BookingTable";
+import HirePreview from "./components/HirePreview";
 
 
 function App() {

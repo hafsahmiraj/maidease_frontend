@@ -115,7 +115,7 @@ export default function MaidLogin() {
       const response = await fetch("http://localhost:5000/api/maids/signup", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({...formData, job_type: ""}),
+        body: JSON.stringify({...formData, job_type: "",use_ai:true}),
       });
 
       const data = await response.json();
