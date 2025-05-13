@@ -82,7 +82,7 @@ export default function Booking() {
                 },
             });
             setLoading(false);
-            navigate('/');
+            navigate('/booking');
         } catch (error) {
             setLoading(false);
             console.error("Error submitting booking:", error);

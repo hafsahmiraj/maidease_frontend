@@ -102,7 +102,7 @@ export default function Navbar() {
             <Link to="/" className="p-link mr-3">Home</Link>
             <Link to="/aboutus" className="p-link mr-3">About us</Link>
             {isLoggedIn && (
-                <Link to="/tableu" className="p-link mr-3">Bookings</Link>
+                <Link to="/booking" className="p-link mr-3">Bookings</Link>
             )}
             {isLoggedIn ? (
                 <div className="flex align-items-center">
