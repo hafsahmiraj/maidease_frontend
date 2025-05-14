@@ -15,6 +15,7 @@ import Aboutus from "./components/AboutUs/Aboutus";
 import Booking from "./components/Booking/Booking";
 import BookingTable from "./components/BookingTable/BookingTable";
 import HirePreview from "./components/HirePreview";
+import PaymentSuccess from "./components/Payment/PaymentSuccess";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/maidedit/:userId" element={<MaidEditNew />} />
           <Route path="/useredit/:userId" element={<UserEdit />}/>
           <Route path="/hire-preview/:maidHireId" element={<HirePreview />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
         </Routes>
       </Router>
     </PrimeReactProvider>

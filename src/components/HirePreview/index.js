@@ -4,7 +4,6 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import ProfileImage from '../UserEdit/components/ProfileImage';
 import RatingSummary from '../UserEdit/components/RatingSummary';
@@ -89,6 +88,39 @@ export default function HirePreview() {
     fetchData();
   }, [maidHireId, userType, token]);
 
+  // Stripe payment handler
+  const handleStripePayment = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('http://localhost:5000/api/maids/hire/stripe/create-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ maid_hire_id: parseInt(maidHireId, 10) }),
+      });
+      const data = await res.json();
+      setLoading(false);
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: data.message || "Failed to initiate payment"
+        });
+      }
+    } catch (err) {
+      setLoading(false);
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Payment initiation failed"
+      });
+    }
+  };
+
   const handleAction = async () => {
     const apiUrl = userType === "USER"
       ? "http://localhost:5000/api/maids/hire/payment-status"
@@ -152,7 +184,7 @@ export default function HirePreview() {
                 <HiringDetailsView
                   hiringDetails={hiringDetails}
                   userType={userType}
-                  onPayment={() => setShowDialog(true)}
+                  onPayment={handleStripePayment}
                   onStatusChange={(value) => {
                     setSelectedStatus(value);
                     setShowDialog(true);
