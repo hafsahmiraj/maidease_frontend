@@ -14,7 +14,7 @@ export default function UserU() {
     password: '',
     gender: '',
     cnic_number: '',
-    District: '',
+    state: '',
     city: '',
     current_address: '',
     marital_Status: '',
@@ -26,7 +26,7 @@ export default function UserU() {
   const toast = useRef(null);
   const navigate = useNavigate();
 
-  const DistrictOptions = [
+  const ProvinceOptions = [
     { label: 'Punjab', value: 'Punjab' },
     { label: 'Sindh', value: 'Sindh' },
     { label: 'Balochistan', value: 'Balochistan' },
@@ -69,11 +69,11 @@ export default function UserU() {
         headers: {'Content-Type': 'application/json'},
       });
       setLoading(false);
-
-      if (response.status === 200) {
+      console.log(response);
+      if (response.status === 201) {
         storeUserDataAndRedirect(response.data);
       } else {
-        toast.current.seshow({verity: 'error', summary: 'Error', detail: response.data.message});
+        toast.current.show({verity: 'error', summary: 'Error', detail: response.data.message});
       }
     } catch (error) {
       setLoading(false);
@@ -139,9 +139,9 @@ export default function UserU() {
                       <input type="text" name="current_address" placeholder="Address" onChange={handleInputChange}
                              required/>
                       <Dropdown
-                          value={formData.District}
-                          onChange={(e) => setFormData({...formData, District: e.value})}
-                          options={DistrictOptions}
+                          value={formData.state}
+                          onChange={(e) => setFormData({...formData, state: e.value})}
+                          options={ProvinceOptions}
                           placeholder="Select District"
                           className="w-full"
                           required
