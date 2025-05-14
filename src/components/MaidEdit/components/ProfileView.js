@@ -1,6 +1,6 @@
-// components/MaidEdit/components/ProfileView.js
 import React from 'react';
 import {Rating} from 'primereact/rating';
+import {Tag} from 'primereact/tag';
 
 export default function ProfileView({maid}) {
   return (
@@ -29,7 +29,22 @@ export default function ProfileView({maid}) {
           <p><strong>Current Address:</strong><span className="profile-value">{maid.current_address}</span></p>
           <p><strong>Marital Status:</strong><span className="profile-value">{maid.marital_Status}</span></p>
           <p><strong>Experience:</strong><span className="profile-value">{maid.experience.toFixed(1)} years</span></p>
-          <p><strong>Skills:</strong><span className="profile-value">{(maid.skills || []).join(", ")}</span></p>
+          <p>
+            <strong>Skills:</strong>
+            <span className="profile-value">
+    {(Array.isArray(maid.skills) ? maid.skills : JSON.parse(maid.skills || "[]")).map((skill, index) => (
+        <Tag
+            key={index}
+            value={skill}
+            style={{
+              margin: "0 5px 5px 0",
+              backgroundColor: `hsl(${(index * 50) % 360}, 70%, 80%)`,
+              color: "#333",
+            }}
+        />
+    ))}
+  </span>
+          </p>
           <p><strong>Profile Description:</strong><span className="profile-value">{maid.profile_description}</span></p>
           <p><strong>Hire Count:</strong><span className="profile-value">{maid.hireCount}</span></p>
           <p><strong>Created At:</strong><span
