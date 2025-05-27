@@ -15,6 +15,7 @@ export default function HomePage() {
     const [filteredMaids, setFilteredMaids] = useState([]);
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortOption, setSortOption] = useState(null);
 
     const sortOptions = [
         {label: 'Name: A to Z', value: 'nameAsc'},
@@ -63,6 +64,13 @@ export default function HomePage() {
             );
         }
 
+        // Sort by selected option
+        if (sortOption === 'nameAsc') {
+            filtered = filtered.sort((a, b) => a.full_name.localeCompare(b.full_name));
+        } else if (sortOption === 'nameDesc') {
+            filtered = filtered.sort((a, b) => b.full_name.localeCompare(a.full_name));
+        }
+
         return filtered;
     };
 
@@ -106,7 +114,9 @@ export default function HomePage() {
                 {/* SORTING AND SEARCH FILTERS */}
                 <div className="sorting-filters">
                     <Dropdown
+                        value={sortOption}
                         options={sortOptions}
+                        onChange={(e) => setSortOption(e.value)}
                         placeholder="Sort by Name"
                         className="sort-dropdown"
                         optionLabel="label"

@@ -162,18 +162,18 @@ export default function Booking() {
                                 return (
                                     <div key={index} className="skill-item-booking">
                                         <span>{skill}</span>
-                                        <span>${skillData ? skillData.amount : 0}</span>
+                                        <span>Rs.{skillData ? skillData.amount : 0}</span>
                                     </div>
                                 );
                             })}
                             <div className="skill-item-booking">
                                 <span>Platform Charges</span>
-                                <span>${PLATFORM_CHARGES}</span>
+                                <span>Rs.{PLATFORM_CHARGES}</span>
                             </div>
                         </div>
                         <div className="total-amount-booking">
                             <span>Total Amount:</span>
-                            <span>${calculateTotal()}</span>
+                            <span>Rs.{calculateTotal()}</span>
                         </div>
                     </div>
                 </div>
