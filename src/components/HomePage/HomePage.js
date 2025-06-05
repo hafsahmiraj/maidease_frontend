@@ -48,6 +48,11 @@ export default function HomePage() {
     const filteredAndSearchedMaids = () => {
         let filtered = maids;
 
+        // Ensure `maids` is an array
+        if (!Array.isArray(filtered)) {
+            return [];
+        }
+
         // Filter by skills
         if (selectedSkills.length > 0) {
             filtered = filtered.filter((maid) =>
