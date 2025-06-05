@@ -122,14 +122,15 @@ export default function Booking() {
                                    required/>
 
                             <label htmlFor="skills">Maid Needed For (Skills)</label>
-                            <MultiSelect
+                            <div  style={{ display: 'flex', marginTop: '10px' }}>
+                                <MultiSelect
                                 value={selectedSkills}
                                 options={skillsOptions}
                                 onChange={(e) => setSelectedSkills(e.value)}
                                 placeholder="Select Skills"
                                 display="chip"
                                 className="w-full"
-                            />
+                            /></div>
                             <div>
                                 <label htmlFor="timing">Preferred Timing of Work</label>
                                 <input type="text" name="timing" placeholder="e.g. 9AM - 5PM"
