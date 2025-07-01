@@ -233,7 +233,7 @@ export default function UserEdit() {
       <div className="profile-card">
         <div className="profile-grid">
           <div className="profile-left">
-            <ProfileImage user={user} />
+            <ProfileImage user={user} isPrivate={true}/>
             <RatingSummary ratingsSummary={ratingsSummary} />
           </div>
           <div className="profile-right">
