@@ -49,6 +49,7 @@ function AboutUs() {
             <a href="https://twitter.com"><FaTwitter size={20} /></a>
             <a href="https://instagram.com"><FaInstagram size={20} /></a>
           </div>
+          <p>Contact us: <a href="mailto:support@maidease.pk">support@maidease.pk</a> | <a href="tel:+923001234567">+92 300 1234567</a></p>
           <p>&copy; 2025 MaidEase. All rights reserved.</p>
         </footer>
       </div>
