@@ -145,13 +145,20 @@ export default function HirePreview() {
         setHiringDetails(prev => ({
           ...prev,
           ...(userType === "USER"
-            ? { payment_status: "Paid" }
-            : { acceptance_status: selectedStatus })
+              ? { payment_status: "Paid" }
+              : { acceptance_status: selectedStatus })
         }));
         toast.current.show({
           severity: "success",
           summary: "Success",
           detail: "Status updated successfully"
+        });
+      } else {
+        const errorData = await response.json();
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: errorData.message || "Failed to update status"
         });
       }
       setLoading(false);
