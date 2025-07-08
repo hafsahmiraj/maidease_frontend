@@ -3,8 +3,26 @@ import {Rating} from 'primereact/rating';
 import {Tag} from 'primereact/tag';
 
 export default function ProfileView({maid}) {
+  const statusColor = maid.profile_status === 'ACTIVE' ? 'success' : 'danger';
+
   return (
       <>
+        <div style={{display: 'flex', alignItems: 'center', marginBottom: 16}}>
+          <Tag
+              value={maid.profile_status}
+              severity={statusColor}
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                padding: '8px 20px',
+                borderRadius: 8,
+                letterSpacing: 2,
+                marginRight: 12,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+              }}
+          />
+          <span style={{fontSize: 16, color: '#888'}}>Profile Status</span>
+        </div>
         <div className="rating-wrapper">
           <Rating
               value={maid.averageRating || 0}
@@ -13,8 +31,8 @@ export default function ProfileView({maid}) {
               stars={5}
           />
           <span className="rating-number">
-                    ({(maid.averageRating || 0).toFixed(1)})
-                  </span>
+                            ({(maid.averageRating || 0).toFixed(1)})
+                        </span>
         </div>
         <div className="profile-details">
           <h3>Personal Info</h3>
@@ -32,18 +50,18 @@ export default function ProfileView({maid}) {
           <p>
             <strong>Skills:</strong>
             <span className="profile-value">
-    {(Array.isArray(maid.skills) ? maid.skills : JSON.parse(maid.skills || "[]")).map((skill, index) => (
-        <Tag
-            key={index}
-            value={skill}
-            style={{
-              margin: "0 5px 5px 0",
-              backgroundColor: `hsl(${(index * 50) % 360}, 70%, 80%)`,
-              color: "#333",
-            }}
-        />
-    ))}
-  </span>
+                                {(Array.isArray(maid.skills) ? maid.skills : JSON.parse(maid.skills || "[]")).map((skill, index) => (
+                                    <Tag
+                                        key={index}
+                                        value={skill}
+                                        style={{
+                                          margin: "0 5px 5px 0",
+                                          backgroundColor: `hsl(${(index * 50) % 360}, 70%, 80%)`,
+                                          color: "#333",
+                                        }}
+                                    />
+                                ))}
+                            </span>
           </p>
           <p><strong>Profile Description:</strong><span className="profile-value">{maid.profile_description}</span></p>
           <p><strong>Hire Count:</strong><span className="profile-value">{maid.hireCount}</span></p>
