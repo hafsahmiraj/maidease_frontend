@@ -63,13 +63,22 @@ export default function UserU() {
   }
 
   const handleSignup = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+    if (!emailRegex.test(formData.email)) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Invalid Email',
+        detail: 'Only .com emails are allowed',
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/users/signup', formData, {
         headers: {'Content-Type': 'application/json'},
       });
       setLoading(false);
-      console.log(response);
       if (response.status === 201) {
         storeUserDataAndRedirect(response.data);
       } else {
@@ -87,6 +96,16 @@ export default function UserU() {
   };
 
   const handleLogin = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+    if (!emailRegex.test(formData.email)) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Invalid Email',
+        detail: 'Only .com emails are allowed',
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', {

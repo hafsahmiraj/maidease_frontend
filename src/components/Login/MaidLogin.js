@@ -90,6 +90,16 @@ export default function MaidLogin() {
   };
 
   const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+    if (!emailRegex.test(formData.email)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Validation Error",
+        detail: "Only .com emails are allowed",
+      });
+      return false;
+    }
+
     for (const key in formData) {
       if (!formData[key] && key !== "job_type" &&
           !(formData.use_ai && (key === "title" || key === "description"))) {
@@ -147,6 +157,16 @@ export default function MaidLogin() {
   };
 
   const handleLogin = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com)$/i;
+    if (!emailRegex.test(formData.email)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Validation Error",
+        detail: "Only .com emails are allowed",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/api/maids/login", {
@@ -264,7 +284,7 @@ export default function MaidLogin() {
                                 setFormData({
                                   ...formData,
                                   use_ai: e.checked,
-                                  ...(e.checked && {title: '', description: ''}) // Clear title and description if checked
+                                  ...(e.checked && {title: '', description: ''})
                                 });
                               }}
                               className="checkbox-align"
