@@ -103,7 +103,7 @@ export default function HomePage() {
             <div className="top-banner">
                 <video
                     className="top-banner-video"
-           src={process.env.PUBLIC_URL + "/maid-banner.mp4"}
+            src={`${process.env.PUBLIC_URL}/maid-banner.mp4`}
                     autoPlay
                     muted
                     loop
