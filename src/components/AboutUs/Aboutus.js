@@ -30,7 +30,7 @@ function AboutUs() {
             <div className="info-card">
               <img 
                 src={`${process.env.PUBLIC_URL}/aboutus/about2.jpg`} 
-                alt="Fast Service" 
+                 
               />
               <h4>Fast Service</h4>
               <p>Get your tasks done quickly with our skilled professionals.</p>
