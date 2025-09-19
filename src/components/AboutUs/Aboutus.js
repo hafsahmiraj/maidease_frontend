@@ -20,23 +20,34 @@ function AboutUs() {
           <h3>Who We Are</h3>
           <div className="cards-container">
             <div className="info-card">
-                src={`${process.env.PUBLIC_URL}${about1.jpg}`}
-  alt={trained_maids}
+              <img 
+                src={`${process.env.PUBLIC_URL}/aboutus/about1.jpg`} 
+                alt="Trained Maids" 
+              />
               <h4>Trained Maids</h4>
               <p>All our maids are background-checked and trained to ensure safety.</p>
             </div>
             <div className="info-card">
-              <img src="/aboutus/about2.jpg" alt="Fast Service" />
+              <img 
+                src={`${process.env.PUBLIC_URL}/aboutus/about2.jpg`} 
+                alt="Fast Service" 
+              />
               <h4>Fast Service</h4>
               <p>Get your tasks done quickly with our skilled professionals.</p>
             </div>
             <div className="info-card">
-              <img src="/aboutus/about3.jpg" alt="Nationwide Network" />
+              <img 
+                src={`${process.env.PUBLIC_URL}/aboutus/about3.jpg`} 
+                alt="Nationwide Network" 
+              />
               <h4>Nationwide Network</h4>
               <p>We connect homes across Pakistan to dependable domestic help.</p>
             </div>
             <div className="info-card">
-              <img src="/aboutus/about4.jpg" alt="Easy Booking" />
+              <img 
+                src={`${process.env.PUBLIC_URL}/aboutus/about4.jpg`} 
+                alt="Easy Booking" 
+              />
               <h4>Easy Booking</h4>
               <p>Seamless online process to book trusted professionals at your convenience.</p>
             </div>
