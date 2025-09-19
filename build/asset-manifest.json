@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/maidease_frontend/static/css/main.2ed19392.css",
-    "main.js": "/maidease_frontend/static/js/main.8f9007d1.js",
+    "main.js": "/maidease_frontend/static/js/main.a5b909cc.js",
     "static/js/453.34be3eca.chunk.js": "/maidease_frontend/static/js/453.34be3eca.chunk.js",
     "static/media/InterVariable-Italic.woff2": "/maidease_frontend/static/media/InterVariable-Italic.e295f70fe3e2df296c7b.woff2",
     "static/media/InterVariable.woff2": "/maidease_frontend/static/media/InterVariable.a0e477f2f1f9d2376fde.woff2",
@@ -12,11 +12,11 @@
     "static/media/primeicons.woff2": "/maidease_frontend/static/media/primeicons.024b32cc7bf399b1a847.woff2",
     "index.html": "/maidease_frontend/index.html",
     "main.2ed19392.css.map": "/maidease_frontend/static/css/main.2ed19392.css.map",
-    "main.8f9007d1.js.map": "/maidease_frontend/static/js/main.8f9007d1.js.map",
+    "main.a5b909cc.js.map": "/maidease_frontend/static/js/main.a5b909cc.js.map",
     "453.34be3eca.chunk.js.map": "/maidease_frontend/static/js/453.34be3eca.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2ed19392.css",
-    "static/js/main.8f9007d1.js"
+    "static/js/main.a5b909cc.js"
   ]
 }
