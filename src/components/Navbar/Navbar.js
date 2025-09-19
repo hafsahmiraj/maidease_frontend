@@ -89,8 +89,7 @@ export default function Navbar() {
       <div className="navbar p-3">
         <div className="navbar-left">
           <img
-              alt="logo"
-              src="/navbar-logo.png"
+             src={`${process.env.PUBLIC_URL}/aboutus/about4.jpg`} alt="logo" 
               height="40"
               className="navbar-logo mr-2"
           />
