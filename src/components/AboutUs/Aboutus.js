@@ -20,7 +20,8 @@ function AboutUs() {
           <h3>Who We Are</h3>
           <div className="cards-container">
             <div className="info-card">
-              <img src="/aboutus/about1.jpg" alt="Trained Maids" />
+                src={`${process.env.PUBLIC_URL}${about1.jpg}`}
+  alt={trained_maids}
               <h4>Trained Maids</h4>
               <p>All our maids are background-checked and trained to ensure safety.</p>
             </div>
